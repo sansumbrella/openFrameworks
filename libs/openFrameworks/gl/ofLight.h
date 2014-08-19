@@ -38,22 +38,22 @@ const ofFloatColor & ofGetGlobalAmbientColor();
 class ofLight : public ofNode {
 public:
 	ofLight();
-	
+
     void setup();
 	void enable();
 	void disable();
 	bool getIsEnabled() const;
-	
+
 	void setDirectional();
 	bool getIsDirectional() const;
-	
+
 	void setSpotlight( float spotCutOff=45.f, float exponent=0.f );
 	bool getIsSpotlight() const;
 	void setSpotlightCutOff( float spotCutOff );
     float getSpotlightCutOff() const;
 	void setSpotConcentration( float exponent );
     float getSpotConcentration() const;
-	
+
 	void setPointLight();
 	bool getIsPointLight() const;
 	void setAttenuation( float constant=1.f, float linear=0.f, float quadratic=0.f );
@@ -63,17 +63,17 @@ public:
 
     void setAreaLight(float width, float height);
     bool getIsAreaLight();
-	
+
 	int getType() const;
-	
+
 	void setAmbientColor(const ofFloatColor& c);
 	void setDiffuseColor(const ofFloatColor& c);
 	void setSpecularColor(const ofFloatColor& c);
-	
+
 	ofFloatColor getAmbientColor() const;
 	ofFloatColor getDiffuseColor() const;
 	ofFloatColor getSpecularColor() const;
-	
+
 	int getLightID() const;
 
 	void customDraw();
@@ -105,12 +105,12 @@ public:
 	    ofVec3f up;
 	    ofVec3f right;
 	};
-	
+
 	// this method overrides ofNode to catch the changes and update glLightv(GL_POSITION)
 private:
-	shared_ptr<Data> data;
-	
-	// update opengl light 
+	std::shared_ptr<Data> data;
+
+	// update opengl light
 	virtual void onPositionChanged();
 	virtual void onOrientationChanged();
 };

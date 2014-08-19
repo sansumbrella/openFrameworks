@@ -84,8 +84,8 @@ bool ofAbstractParameter::isSerializable() const{
 	return true;
 }
 
-shared_ptr<ofAbstractParameter> ofAbstractParameter::newReference() const{
-	return shared_ptr<ofAbstractParameter>(new ofAbstractParameter(*this));
+std::shared_ptr<ofAbstractParameter> ofAbstractParameter::newReference() const{
+	return std::shared_ptr<ofAbstractParameter>(new ofAbstractParameter(*this));
 }
 
 ostream& operator<<(ostream& os, const ofAbstractParameter& p){

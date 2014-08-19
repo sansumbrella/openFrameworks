@@ -91,7 +91,7 @@ public:
 
 	void setSerializable(bool serializable);
 	bool isSerializable() const;
-	shared_ptr<ofAbstractParameter> newReference() const;
+	std::shared_ptr<ofAbstractParameter> newReference() const;
 
 	void setParent(ofParameterGroup * _parent);
 	const ofParameterGroup * getParent() const;
@@ -106,12 +106,12 @@ private:
 		,parent(NULL){}
 
 		map<string,int> parametersIndex;
-		vector<shared_ptr<ofAbstractParameter> > parameters;
+		vector<std::shared_ptr<ofAbstractParameter> > parameters;
 		string name;
 		bool serializable;
 		ofParameterGroup * parent;
 	};
-	shared_ptr<Value> obj;
+	std::shared_ptr<Value> obj;
 };
 
 

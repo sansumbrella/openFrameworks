@@ -209,7 +209,7 @@ void ofMaterial::beginShader(int texType){
 			continue;
 		}
 
-		shared_ptr<ofLight::Data> light = ofLightsData()[i].lock();
+		std::shared_ptr<ofLight::Data> light = ofLightsData()[i].lock();
 		ofVec4f lightEyePosition = light->position * ofGetCurrentViewMatrix();
 		currentShader->setUniform1f("lights["+idx+"].enabled",1);
 		currentShader->setUniform1f("lights["+idx+"].type", light->lightType);

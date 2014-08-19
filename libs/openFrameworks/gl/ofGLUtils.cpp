@@ -604,11 +604,11 @@ bool ofGLSupportsNPOTTextures(){
 #endif
 }
 
-shared_ptr<ofGLProgrammableRenderer> ofGetGLProgrammableRenderer(){
+std::shared_ptr<ofGLProgrammableRenderer> ofGetGLProgrammableRenderer(){
 	if(ofGetCurrentRenderer() && ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
-		return (shared_ptr<ofGLProgrammableRenderer>&)ofGetCurrentRenderer();
+		return (std::shared_ptr<ofGLProgrammableRenderer>&)ofGetCurrentRenderer();
 	}else{
-		return shared_ptr<ofGLProgrammableRenderer>();
+		return std::shared_ptr<ofGLProgrammableRenderer>();
 	}
 }
 
@@ -617,23 +617,23 @@ bool ofIsGLProgrammableRenderer(){
 }
 
 #ifndef TARGET_PROGRAMMABLE_GL
-shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
+std::shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
 	if(ofGetCurrentRenderer()->getType()==ofGLRenderer::TYPE || ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
-		return (shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
+		return (std::shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
 	}else if(ofGetCurrentRenderer()->getType()==ofRendererCollection::TYPE){
-		return ((shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
+		return ((std::shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
 	}else{
-		return shared_ptr<ofGLRenderer>();
+		return std::shared_ptr<ofGLRenderer>();
 	}
 }
 #else
-shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
+std::shared_ptr<ofBaseGLRenderer> ofGetGLRenderer(){
 	if(ofGetCurrentRenderer()->getType()==ofGLProgrammableRenderer::TYPE){
-		return (shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
+		return (std::shared_ptr<ofBaseGLRenderer>&)ofGetCurrentRenderer();
 	}else if(ofGetCurrentRenderer()->getType()==ofRendererCollection::TYPE){
-		return ((shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
+		return ((std::shared_ptr<ofRendererCollection>&)ofGetCurrentRenderer())->getGLRenderer();
 	}else{
-		return shared_ptr<ofGLProgrammableRenderer>();
+		return std::shared_ptr<ofGLProgrammableRenderer>();
 	}
 }
 #endif

@@ -29,7 +29,7 @@ class ofBaseLoggerChannel;
 void ofLogToFile(const string & path, bool append=false);
 void ofLogToConsole();
 
-void ofSetLoggerChannel(shared_ptr<ofBaseLoggerChannel> loggerChannel);
+void ofSetLoggerChannel(std::shared_ptr<ofBaseLoggerChannel> loggerChannel);
 
 //------------------------------------------------------------------------------
 /// \class ofLog
@@ -38,7 +38,7 @@ void ofSetLoggerChannel(shared_ptr<ofBaseLoggerChannel> loggerChannel);
 /// ofLog accepts variables via the ostream operator << and builds a string
 /// and logs it when the stream is finished (via the destructor). A newline is
 /// printed automatically and all the stream controls (endl, flush, hex, etc)
-/// work normally. The log level is explicitly OF_LOG_NOTICE unless set, see the 
+/// work normally. The log level is explicitly OF_LOG_NOTICE unless set, see the
 /// derived wrapper classes:
 ///
 /// Usage: ofLog() << "a string" << 100 << 20.234f;
@@ -56,58 +56,58 @@ void ofSetLoggerChannel(shared_ptr<ofBaseLoggerChannel> loggerChannel);
 ///
 class ofLog{
 	public:
-	
+
 		/// log at notice level
 		ofLog();
-		
+
 		/// set the log level
 		ofLog(ofLogLevel level);
-		
+
 		/// the legacy ofLog interfaces
 		ofLog(ofLogLevel level, const string & message);
 		ofLog(ofLogLevel level, const char* format, ...);
-		
+
 		/// does the actual printing when the ostream is done
 		virtual ~ofLog();
-		
+
 		/// catch the << ostream with a template class to read any type of data
-		template <class T> 
+		template <class T>
 			ofLog& operator<<(const T& value){
 			message << value << padding;
 			return *this;
 		}
-		
+
 		/// catch the << ostream function pointers such as std::endl and std::hex
 		ofLog& operator<<(std::ostream& (*func)(std::ostream&)){
 			func(message);
 			return *this;
 		}
-		
+
 		/// put a space between stream operator calls?
 		static void setAutoSpace(bool autoSpace);
-		
+
 		/// set the logging channel destinations for messages
-		static void setChannel(shared_ptr<ofBaseLoggerChannel> channel);
-	
+		static void setChannel(std::shared_ptr<ofBaseLoggerChannel> channel);
+
 	protected:
 		ofLogLevel level;			///< log level
-		bool bPrinted;				///< has the msg been printed in the constructor? 
+		bool bPrinted;				///< has the msg been printed in the constructor?
 		string module;				///< the destination module for this message
-		
+
 		/// print a log line
 		void _log(ofLogLevel level, const string & module, const string & message);
 		bool checkLog(ofLogLevel level, const string & module);
-	
-		static shared_ptr<ofBaseLoggerChannel> channel;	///< the message destination
-	
+
+		static std::shared_ptr<ofBaseLoggerChannel> channel;	///< the message destination
+
 	private:
 		std::ostringstream message;	///< temp buffer
-		
-		static bool bAutoSpace;		///< add a space between messages? 
-		
+
+		static bool bAutoSpace;		///< add a space between messages?
+
 		ofLog(ofLog const&) {}        					// not defined, not copyable
 		ofLog& operator=(ofLog& from) {return *this;}	// not defined, not assignable
-		
+
 		static string padding;						///< the padding between ostream calls
 };
 

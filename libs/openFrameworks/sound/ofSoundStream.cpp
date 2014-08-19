@@ -2,7 +2,7 @@
 #include "ofAppRunner.h"
 
 ofSoundStream soundStreamInput;
-ofSoundStream soundStreamOutput;	
+ofSoundStream soundStreamOutput;
 
 //------------------------------------------------------------
 void ofSoundStreamSetup(int nOutputChannels, int nInputChannels, ofBaseApp * appPtr){
@@ -48,17 +48,17 @@ void ofSoundStreamListDevices(){
 //------------------------------------------------------------
 ofSoundStream::ofSoundStream(){
 	#ifdef OF_SOUND_STREAM_TYPE
-		setSoundStream( shared_ptr<OF_SOUND_STREAM_TYPE>(new OF_SOUND_STREAM_TYPE) );
+		setSoundStream( std::shared_ptr<OF_SOUND_STREAM_TYPE>(new OF_SOUND_STREAM_TYPE) );
 	#endif
 }
 
 //------------------------------------------------------------
-void ofSoundStream::setSoundStream(shared_ptr<ofBaseSoundStream> soundStreamPtr){
+void ofSoundStream::setSoundStream(std::shared_ptr<ofBaseSoundStream> soundStreamPtr){
 	soundStream = soundStreamPtr;
 }
 
 //------------------------------------------------------------
-shared_ptr<ofBaseSoundStream> ofSoundStream::getSoundStream(){
+std::shared_ptr<ofBaseSoundStream> ofSoundStream::getSoundStream(){
 	return soundStream;
 }
 
@@ -73,7 +73,7 @@ void ofSoundStream::listDevices(){
 void ofSoundStream::setDeviceID(int deviceID){
 	if( soundStream ){
 		soundStream->setDeviceID(deviceID);
-	}	
+	}
 }
 
 //------------------------------------------------------------

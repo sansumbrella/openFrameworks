@@ -43,7 +43,7 @@ public:
 	friend istream& operator>>(istream& is, ofAbstractParameter& p);
 
 	virtual bool isSerializable() const;
-	virtual shared_ptr<ofAbstractParameter> newReference() const;
+	virtual std::shared_ptr<ofAbstractParameter> newReference() const;
 
 protected:
 	virtual void setSerializable(bool serializable);
@@ -130,7 +130,7 @@ public:
 	void fromString(string str);
 
 	void setSerializable(bool serializable);
-	shared_ptr<ofAbstractParameter> newReference() const;
+	std::shared_ptr<ofAbstractParameter> newReference() const;
 
 	void setParent(ofParameterGroup * _parent);
 	const ofParameterGroup * getParent() const;
@@ -173,7 +173,7 @@ private:
 		bool serializable;
 		ofParameterGroup * parent;
 	};
-	shared_ptr<Value> obj;
+	std::shared_ptr<Value> obj;
 	void (ofParameter<ParameterType>::*setMethod)(ParameterType v);
 
 	void eventsSetValue(ParameterType v);
@@ -190,17 +190,17 @@ ofParameter<ParameterType>::ofParameter()
 
 template<typename ParameterType>
 ofParameter<ParameterType>::ofParameter(ParameterType v)
-:obj(shared_ptr<Value>(new Value(v)))
+:obj(std::shared_ptr<Value>(new Value(v)))
 ,setMethod(&ofParameter<ParameterType>::eventsSetValue) {}
 
 template<typename ParameterType>
 ofParameter<ParameterType>::ofParameter(string name, ParameterType v)
-:obj(shared_ptr<Value>(new Value(name, v)))
+:obj(std::shared_ptr<Value>(new Value(name, v)))
 ,setMethod(&ofParameter<ParameterType>::eventsSetValue){}
 
 template<typename ParameterType>
 ofParameter<ParameterType>::ofParameter(string name, ParameterType v, ParameterType min, ParameterType max)
-:obj(shared_ptr<Value>(new Value(name, v, min, max)))
+:obj(std::shared_ptr<Value>(new Value(name, v, min, max)))
 ,setMethod(&ofParameter<ParameterType>::eventsSetValue){}
 
 
@@ -453,8 +453,8 @@ void ofParameter<ParameterType>::makeReferenceTo(ofParameter<ParameterType> mom)
 }
 
 template<typename ParameterType>
-shared_ptr<ofAbstractParameter> ofParameter<ParameterType>::newReference() const{
-	return shared_ptr<ofAbstractParameter>(new ofParameter<ParameterType>(*this));
+std::shared_ptr<ofAbstractParameter> ofParameter<ParameterType>::newReference() const{
+	return std::shared_ptr<ofAbstractParameter>(new ofParameter<ParameterType>(*this));
 }
 
 template<typename ParameterType>
@@ -503,7 +503,7 @@ public:
 
 	template<class ListenerClass, typename ListenerMethod>
 	void removeListener(ListenerClass * listener, ListenerMethod method);
-	shared_ptr<ofAbstractParameter> newReference() const;
+	std::shared_ptr<ofAbstractParameter> newReference() const;
 	const ofParameterGroup * getParent() const;
 
 protected:
@@ -548,7 +548,7 @@ protected:
 
 
 	ofReadOnlyParameter<ParameterType,Friend>& set(ParameterType v);
-	
+
 	ofReadOnlyParameter<ParameterType,Friend>& set(string name, ParameterType value);
 	ofReadOnlyParameter<ParameterType,Friend>& set(string name, ParameterType value, ParameterType min, ParameterType max);
 
@@ -562,7 +562,7 @@ protected:
 
 
 	ofParameter<ParameterType> parameter;
-	
+
 	friend class ofParameterGroup;
 };
 
@@ -821,8 +821,8 @@ inline void ofReadOnlyParameter<ParameterType,Friend>::fromString(string str){
 }
 
 template<typename ParameterType,typename Friend>
-shared_ptr<ofAbstractParameter> ofReadOnlyParameter<ParameterType,Friend>::newReference() const{
-	return shared_ptr<ofAbstractParameter>(new ofParameter<ParameterType>(*this));
+std::shared_ptr<ofAbstractParameter> ofReadOnlyParameter<ParameterType,Friend>::newReference() const{
+	return std::shared_ptr<ofAbstractParameter>(new ofParameter<ParameterType>(*this));
 }
 
 template<typename ParameterType,typename Friend>

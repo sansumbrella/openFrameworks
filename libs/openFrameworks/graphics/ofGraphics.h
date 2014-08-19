@@ -11,9 +11,9 @@
 #define  	CIRC_RESOLUTION		    22				// 22 pts for a circle...
 
 
-void ofSetCurrentRenderer(shared_ptr<ofBaseRenderer> renderer,bool setDefaults=false);
+void ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer> renderer,bool setDefaults=false);
 void ofSetCurrentRenderer(const string & rendererType,bool setDefaults=false);
-shared_ptr<ofBaseRenderer> & ofGetCurrentRenderer();
+std::shared_ptr<ofBaseRenderer> & ofGetCurrentRenderer();
 
 //for pdf screenshot
 void ofBeginSaveScreenAsPDF(string filename, bool bMultipage = false, bool b3D = false, ofRectangle viewport = ofRectangle(0,0,0,0));
@@ -142,7 +142,7 @@ void ofDisablePointSprites();
 void ofEnableAlphaBlending();  // this just turns on and off opengl blending, the common mode
 void ofDisableAlphaBlending();
 
-// smooth 
+// smooth
 void ofEnableSmoothing();
 void ofDisableSmoothing();
 

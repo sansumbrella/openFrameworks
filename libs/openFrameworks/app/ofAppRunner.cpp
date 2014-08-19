@@ -28,8 +28,8 @@
 //========================================================================
 // static variables:
 
-static shared_ptr<ofBaseApp>				OFSAptr;
-static shared_ptr<ofAppBaseWindow> 		window;
+static std::shared_ptr<ofBaseApp>				OFSAptr;
+static std::shared_ptr<ofAppBaseWindow> 		window;
 
 //========================================================================
 // default windowing
@@ -54,12 +54,12 @@ static shared_ptr<ofAppBaseWindow> 		window;
 #ifdef TARGET_OPENGLES
 static void noopDeleter(ofAppBaseGLESWindow*){}
 void ofSetupOpenGL(ofAppBaseGLESWindow * windowPtr, int w, int h, int screenMode){
-	ofSetupOpenGL(shared_ptr<ofAppBaseGLESWindow>(windowPtr,std::ptr_fun(noopDeleter)),w,h,screenMode);
+	ofSetupOpenGL(std::shared_ptr<ofAppBaseGLESWindow>(windowPtr,std::ptr_fun(noopDeleter)),w,h,screenMode);
 }
 #else
 static void noopDeleter(ofAppBaseGLWindow*){}
 void ofSetupOpenGL(ofAppBaseGLWindow * windowPtr, int w, int h, int screenMode){
-	ofSetupOpenGL(shared_ptr<ofAppBaseGLWindow>(windowPtr,std::ptr_fun(noopDeleter)),w,h,screenMode);
+	ofSetupOpenGL(std::shared_ptr<ofAppBaseGLWindow>(windowPtr,std::ptr_fun(noopDeleter)),w,h,screenMode);
 }
 #endif
 
@@ -83,7 +83,7 @@ void ofURLFileLoaderShutdown();
 //--------------------------------------
 void ofRunApp(ofBaseApp * OFSA){
 
-	OFSAptr = shared_ptr<ofBaseApp>(OFSA);
+	OFSAptr = std::shared_ptr<ofBaseApp>(OFSA);
 	if(OFSAptr){
 		OFSAptr->mouseX = 0;
 		OFSAptr->mouseY = 0;
@@ -124,7 +124,7 @@ void ofRunApp(ofBaseApp * OFSA){
 	ofSeedRandom();
 	ofResetElapsedTimeCounter();
 	ofSetWorkingDirectoryToDefault();
-	
+
 
     ofAddListener(ofEvents().setup,OFSAptr.get(),&ofBaseApp::setup,OF_EVENT_ORDER_APP);
     ofAddListener(ofEvents().update,OFSAptr.get(),&ofBaseApp::update,OF_EVENT_ORDER_APP);
@@ -212,15 +212,15 @@ string ofGetGLSLVersion(){
 
 //--------------------------------------
 #ifdef TARGET_OPENGLES
-void ofSetupOpenGL(shared_ptr<ofAppBaseGLESWindow> windowPtr, int w, int h, int screenMode){
+void ofSetupOpenGL(std::shared_ptr<ofAppBaseGLESWindow> windowPtr, int w, int h, int screenMode){
 #else
-void ofSetupOpenGL(shared_ptr<ofAppBaseGLWindow> windowPtr, int w, int h, int screenMode){
+void ofSetupOpenGL(std::shared_ptr<ofAppBaseGLWindow> windowPtr, int w, int h, int screenMode){
 #endif
     if(!ofGetCurrentRenderer()) {
 	#ifdef TARGET_PROGRAMMABLE_GL
-	    ofPtr<ofBaseRenderer> renderer(new ofGLProgrammableRenderer(false));
+	    std::shared_ptr<ofBaseRenderer> renderer(new ofGLProgrammableRenderer(false));
 	#else
-	    shared_ptr<ofBaseRenderer> renderer(new ofGLRenderer(false));
+	    std::shared_ptr<ofBaseRenderer> renderer(new ofGLRenderer(false));
 	#endif
 	    ofSetCurrentRenderer(renderer,false);
     }
@@ -284,20 +284,20 @@ void ofGLReadyCallback(){
 //--------------------------------------
 void ofSetupOpenGL(int w, int h, int screenMode){
 	#ifdef TARGET_NODISPLAY
-		shared_ptr<ofAppBaseWindow> window = shared_ptr<ofAppBaseWindow>(new ofAppNoWindow());
+		std::shared_ptr<ofAppBaseWindow> window = std::shared_ptr<ofAppBaseWindow>(new ofAppNoWindow());
 	#else
 		#if defined(TARGET_OF_IOS)
-			shared_ptr<ofAppBaseGLESWindow> glWindow = shared_ptr<ofAppBaseGLESWindow>(new ofAppiOSWindow());
+			std::shared_ptr<ofAppBaseGLESWindow> glWindow = std::shared_ptr<ofAppBaseGLESWindow>(new ofAppiOSWindow());
 		#elif defined(TARGET_ANDROID)
-			shared_ptr<ofAppBaseGLESWindow> glWindow = shared_ptr<ofAppBaseGLESWindow>(new ofAppAndroidWindow());
+			std::shared_ptr<ofAppBaseGLESWindow> glWindow = std::shared_ptr<ofAppBaseGLESWindow>(new ofAppAndroidWindow());
 		#elif defined(TARGET_RASPBERRY_PI)
-			shared_ptr<ofAppBaseGLESWindow> glWindow = shared_ptr<ofAppBaseGLESWindow>(new ofAppEGLWindow());
+			std::shared_ptr<ofAppBaseGLESWindow> glWindow = std::shared_ptr<ofAppBaseGLESWindow>(new ofAppEGLWindow());
 		#elif defined(TARGET_EMSCRIPTEN)
-			shared_ptr<ofAppBaseGLESWindow> glWindow = shared_ptr<ofAppBaseGLESWindow>(new ofxAppEmscriptenWindow);
+			std::shared_ptr<ofAppBaseGLESWindow> glWindow = std::shared_ptr<ofAppBaseGLESWindow>(new ofxAppEmscriptenWindow);
 		#elif defined(TARGET_OPENGLES)
-			shared_ptr<ofAppBaseGLESWindow> glWindow = shared_ptr<ofAppBaseGLESWindow>(new ofAppGLFWWindow());
+			std::shared_ptr<ofAppBaseGLESWindow> glWindow = std::shared_ptr<ofAppBaseGLESWindow>(new ofAppGLFWWindow());
 		#else
-			shared_ptr<ofAppBaseGLWindow> glWindow = shared_ptr<ofAppBaseGLWindow>(new ofAppGLFWWindow());
+			std::shared_ptr<ofAppBaseGLWindow> glWindow = std::shared_ptr<ofAppBaseGLWindow>(new ofAppGLFWWindow());
 		#endif
 		window = glWindow;
 		ofSetupOpenGL(glWindow,w,h,screenMode);
@@ -305,10 +305,10 @@ void ofSetupOpenGL(int w, int h, int screenMode){
 }
 
 void ofSetWindow(ofAppBaseWindow * windowPtr){
-	ofSetWindow(shared_ptr<ofAppBaseWindow>(windowPtr));
+	ofSetWindow(std::shared_ptr<ofAppBaseWindow>(windowPtr));
 }
 
-void ofSetWindow(shared_ptr<ofAppBaseWindow> windowPtr){
+void ofSetWindow(std::shared_ptr<ofAppBaseWindow> windowPtr){
 	window = windowPtr;
 }
 
@@ -316,7 +316,7 @@ void ofSetupOpenGL(ofAppBaseWindow * windowPtr, int w, int h, int screenMode){
 	ofSetWindow(windowPtr);
 }
 
-/*void ofSetupOpenGL(shared_ptr<ofAppBaseWindow> windowPtr, int w, int h, int screenMode){
+/*void ofSetupOpenGL(std::shared_ptr<ofAppBaseWindow> windowPtr, int w, int h, int screenMode){
 	ofSetWindow(windowPtr);
 }*/
 
@@ -372,7 +372,7 @@ void ofExitCallback(){
 }
 
 //--------------------------------------
-void ofRunApp(shared_ptr<ofBaseApp> OFSA){
+void ofRunApp(std::shared_ptr<ofBaseApp> OFSA){
 
 	OFSAptr = OFSA;
 	if(OFSAptr){
@@ -430,7 +430,7 @@ ofAppBaseWindow * ofGetWindowPtr(){
 }
 
 //--------------------------------------
-void ofSetAppPtr(shared_ptr<ofBaseApp> appPtr) {
+void ofSetAppPtr(std::shared_ptr<ofBaseApp> appPtr) {
 	OFSAptr = appPtr;
 }
 

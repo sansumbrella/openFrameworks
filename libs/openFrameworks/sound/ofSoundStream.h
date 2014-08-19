@@ -18,7 +18,7 @@
 #elif defined(OF_SOUNDSTREAM_EMSCRIPTEN)
 	#include "ofxEmscriptenSoundStream.h"
 	#define OF_SOUND_STREAM_TYPE ofxEmscriptenSoundStream
-#endif 
+#endif
 
 /// \brief Sets up and starts a global ofSoundStream.
 ///
@@ -88,9 +88,9 @@ void ofSoundStreamListDevices();
 class ofSoundStream{
 public:
     ofSoundStream();
-    
-    void setSoundStream(shared_ptr<ofBaseSoundStream> soundStreamPtr);
-    shared_ptr<ofBaseSoundStream> getSoundStream();
+
+    void setSoundStream(std::shared_ptr<ofBaseSoundStream> soundStreamPtr);
+    std::shared_ptr<ofBaseSoundStream> getSoundStream();
 
     /// \brief prints a list of available audio devices to the console.
     void listDevices();
@@ -150,7 +150,7 @@ public:
     /// \brief Queries the stream's number of input channels.
     /// \return the number of input channels (e.g. 2 for stereo).
     int getNumInputChannels();
-    
+
     /// \brief Queries the stream's number of output channels.
     /// \return the number of output channels (e.g. 2 for stereo).
     int getNumOutputChannels();
@@ -163,8 +163,8 @@ public:
     /// \brief Queries the stream's buffer size.
     /// \return the current buffer size of the stream.
     int getBufferSize();
-    
+
 protected:
-    shared_ptr<ofBaseSoundStream> soundStream;
+    std::shared_ptr<ofBaseSoundStream> soundStream;
 
 };

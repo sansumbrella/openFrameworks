@@ -32,7 +32,7 @@ static int			windowMode;
 static bool			bNewScreenMode;
 static int			buttonInUse;
 static bool			bEnableSetupScreen;
-static bool			bDoubleBuffered; 
+static bool			bDoubleBuffered;
 
 static int			requestedWidth;
 static int			requestedHeight;
@@ -207,7 +207,7 @@ ofAppGlutWindow::ofAppGlutWindow(){
  }
 
 
-void ofAppGlutWindow::setDoubleBuffering(bool _bDoubleBuffered){ 
+void ofAppGlutWindow::setDoubleBuffering(bool _bDoubleBuffered){
 	bDoubleBuffered = _bDoubleBuffered;
 }
 
@@ -224,7 +224,7 @@ void ofAppGlutWindow::setupOpenGL(int w, int h, int screenMode){
 	if( displayString != ""){
 		glutInitDisplayString( displayString.c_str() );
 	}else{
-		if(bDoubleBuffered){  
+		if(bDoubleBuffered){
 			glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH | GLUT_ALPHA );
 		}else{
 			glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE | GLUT_DEPTH | GLUT_ALPHA );
@@ -237,7 +237,7 @@ void ofAppGlutWindow::setupOpenGL(int w, int h, int screenMode){
 	if (windowMode == OF_FULLSCREEN){
 		glutInitWindowSize(glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
 		glutCreateWindow("");
-		
+
 		requestedWidth  = w;
 		requestedHeight = h;
 	} else if (windowMode != OF_GAME_MODE){
@@ -605,7 +605,7 @@ void ofAppGlutWindow::display(void){
 	}
 
 
-	shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
+	std::shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
 	if(renderer){
 		renderer->startRender();
 	}
@@ -701,7 +701,7 @@ static void rotateMouseXY(ofOrientation orientation, int &x, int &y) {
 //------------------------------------------------------------
 void ofAppGlutWindow::mouse_cb(int button, int state, int x, int y) {
 	rotateMouseXY(orientation, x, y);
-    
+
 
 	switch(button){
 	case GLUT_LEFT_BUTTON:
@@ -714,7 +714,7 @@ void ofAppGlutWindow::mouse_cb(int button, int state, int x, int y) {
 		button = OF_MOUSE_BUTTON_MIDDLE;
 		break;
 	}
-    
+
 	if (ofGetFrameNum() > 0){
 		if (state == GLUT_DOWN) {
 			ofNotifyMousePressed(x, y, button);
@@ -802,7 +802,7 @@ void ofAppGlutWindow::resize_cb(int w, int h) {
 }
 
 void ofAppGlutWindow::entry_cb( int state ) {
-	
+
 	ofNotifyWindowEntry( state );
-	
+
 }

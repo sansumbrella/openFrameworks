@@ -31,7 +31,7 @@
  *
  * Copyright (c) 1999-2000 by Pawel W. Olszta
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -345,20 +345,20 @@ static int vC = 0;
 //---------------------------------------------------------------------
 static void prepareBitmapTexture(){
 
-			
-	
+
+
 	if (!bBitmapTexturePrepared){
 		myLetterPixels.allocate(16*16, 16*16, 4); // letter size:8x14pixels, texture size:16x8letters, gl_rgba: 4bytes/1pixel
         myLetterPixels.set(0);
 
 		bitmappedFontTexture.allocate(16*16, 16*16, GL_RGBA, false);
-		
+
 		bBitmapTexturePrepared = true;
-		
+
 		for (int i = 0; i < 256; i++) {
-			
+
 			const unsigned char * face = bmpChar_8x13_Map[i];
-			
+
 			for (int j = 1; j < 15; j++){
 				for (int k = 0; k < 8; k++){
 					if ( ((face[15-j] << k) & (128)) > 0 ){
@@ -375,24 +375,24 @@ static void prepareBitmapTexture(){
 				}
 			}
 		}
-		
+
 		bitmappedFontTexture.loadData(myLetterPixels);
 		bitmappedFontTexture.setTextureMinMagFilter(GL_LINEAR,GL_NEAREST);
 
 		charMesh.setMode(OF_PRIMITIVE_TRIANGLES);
-		
+
 	}
 
 }
-		
+
 //---------------------------------------------------------------------
 void  ofDrawBitmapCharacter(int character, int x , int y){
 
 	if(!bBitmapTexturePrepared){
 		prepareBitmapTexture();
 	}
-		
-	if (character < 128) {		
+
+	if (character < 128) {
 
 		float posTexW = (float)(character % 16)/16.0f;
 		float posTexH = ((int)(character / 16.0f))/16.0f;
@@ -428,9 +428,9 @@ void  ofDrawBitmapCharacter(int character, int x , int y){
 		charMesh.getVertices()[vC+3].set(x+8,y+yOffset);
 		charMesh.getVertices()[vC+4].set(x,y+yOffset);
 		charMesh.getVertices()[vC+5].set(x,y);
-			
+
 		vC += 6;
-	}	
+	}
 }
 
 //---------------------------------------------------------------------
@@ -441,7 +441,7 @@ void ofDrawBitmapCharacterStart(int stringLength){
 	if(!bBitmapTexturePrepared){
 		prepareBitmapTexture();
 	}
-	
+
 	vC = 0;
 }
 
@@ -452,7 +452,7 @@ void ofDrawBitmapCharacterEnd(){
 		charMesh.getTexCoords().resize(vC);
 		bitmappedFontTexture.bind();
 
-		shared_ptr<ofGLProgrammableRenderer> programmableRenderer = ofGetGLProgrammableRenderer();
+		std::shared_ptr<ofGLProgrammableRenderer> programmableRenderer = ofGetGLProgrammableRenderer();
 
 		if (!programmableRenderer){
 			#ifndef TARGET_OPENGLES

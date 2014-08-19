@@ -601,7 +601,7 @@ void ofGLRenderer::loadViewMatrix(const ofMatrix4x4 & m){
 
 	if(lightingEnabled){
 		for(size_t i=0;i<ofLightsData().size();i++){
-			shared_ptr<ofLight::Data> lightData = ofLightsData()[i].lock();
+			std::shared_ptr<ofLight::Data> lightData = ofLightsData()[i].lock();
 			if(lightData && lightData->isEnabled){
 				glLightfv(GL_LIGHT0 + lightData->glIndex, GL_POSITION, &lightData->position.x);
 			}

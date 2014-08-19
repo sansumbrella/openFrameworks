@@ -153,7 +153,7 @@ bool ofShader::setupShaderFromFile(GLenum type, string filename) {
 //--------------------------------------------------------------
 bool ofShader::setupShaderFromSource(GLenum type, string source, string sourceDirectoryPath) {
     unload();
-    
+
 	// create program if it doesn't exist already
 	checkAndCreateProgram();
 	GLuint clearErrors = glGetError(); //needed for some users to clear gl errors
@@ -170,16 +170,16 @@ bool ofShader::setupShaderFromSource(GLenum type, string source, string sourceDi
 
 	// parse for includes
 	string src = parseForIncludes( source , sourceDirectoryPath);
-	
+
 	// store source code (that's the expanded source with all includes copied in)
 	shaderSource[type] = src;
-	
+
 	// compile shader
 	const char* sptr = src.c_str();
 	int ssize = src.size();
 	glShaderSource(shader, 1, &sptr, &ssize);
 	glCompileShader(shader);
-	
+
 	// check compile status
 	GLint status = GL_FALSE;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -188,18 +188,18 @@ bool ofShader::setupShaderFromSource(GLenum type, string source, string sourceDi
         ofLogError("ofShader") << "setupShaderFromSource(): OpenGL generated error " << err << " trying to get the compile status for a " << nameForType(type) << " shader, does your video card support this?";
         return false;
     }
-    
+
 	if(status == GL_TRUE){
 		ofLogVerbose("ofShader") << "setupShaderFromSource(): " << nameForType(type) + " shader compiled";
 		checkShaderInfoLog(shader, type, OF_LOG_WARNING);
 	}
-	
+
 	else if (status == GL_FALSE) {
 		ofLogError("ofShader") << "setupShaderFromSource(): " << nameForType(type) + " shader failed to compile";
 		checkShaderInfoLog(shader, type, OF_LOG_ERROR);
 		return false;
 	}
-	
+
 	shaders[type] = shader;
 	retainShader(shader);
 
@@ -217,50 +217,50 @@ string ofShader::parseForIncludes( const string& source, const string& sourceDir
 }
 
 string ofShader::parseForIncludes( const string& source, vector<string>& included, int level, const string& sourceDirectoryPath) {
-    
+
 	if ( level > 32 ) {
 		ofLog( OF_LOG_ERROR, "glsl header inclusion depth limit reached, might be caused by cyclic header inclusion" );
 		return "";
 	}
-	
+
 	stringstream output;
 	stringstream input;
 	input << source;
-	
+
 	Poco::RegularExpression re("^[ ]*#[ ]*pragma[ ]*include[ ]+[\"<](.*)[\">].*");
 	Poco::RegularExpression::MatchVec matches;
-	
+
 	string line;
 	while( std::getline( input, line ) ) {
-		
+
 		if ( re.match( line, 0, matches ) < 2 ) {
 			output << line << endl;
 			continue;
 		}
-		
+
 		string include = line.substr(matches[1].offset, matches[1].length);
-		
+
 		if ( std::find( included.begin(), included.end(), include ) != included.end() ) {
 			ofLogVerbose() << include << " already included";
 			continue;
 		}
-		
+
 		// we store the absolute paths so as have (more) unique file identifiers.
-		
+
 		include = ofFile(sourceDirectoryPath + include).getAbsolutePath();
 		included.push_back( include );
-		
-		
+
+
 		ofBuffer buffer = ofBufferFromFile( include );
 		if ( !buffer.size() ) {
 			ofLogError() <<"Could not open glsl include file " << include;
 			continue;
 		}
-		
+
 		string currentDir = ofFile(include).getEnclosingDirectory();
 		output << parseForIncludes( buffer.getText(), included, level + 1, currentDir ) << endl;
 	}
-	
+
 	return output.str();
 }
 
@@ -448,7 +448,7 @@ bool ofShader::isLoaded(){
 void ofShader::begin() {
 	if (bLoaded){
 		glUseProgram(program);
-		shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
+		std::shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
 		if(renderer){
 			renderer->beginCustomShader(*this);
 		}
@@ -460,7 +460,7 @@ void ofShader::begin() {
 //--------------------------------------------------------------
 void ofShader::end() {
 	if (bLoaded){
-		shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
+		std::shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
 		if(renderer){
 			renderer->endCustomShader();
 		}else{
@@ -790,10 +790,10 @@ void ofShader::printActiveUniforms() {
 	GLint numUniforms = 0;
 	glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &numUniforms);
 	ofLogNotice("ofShader") << numUniforms << " uniforms";
-	
+
 	GLint uniformMaxLength = 0;
 	glGetProgramiv(program, GL_ACTIVE_UNIFORM_MAX_LENGTH, &uniformMaxLength);
-	
+
 	GLint count = -1;
 	GLenum type = 0;
 	GLchar* uniformName = new GLchar[uniformMaxLength];
@@ -817,10 +817,10 @@ void ofShader::printActiveAttributes() {
 	GLint numAttributes = 0;
 	glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &numAttributes);
 	ofLogNotice("ofShader") << numAttributes << " attributes";
-	
+
 	GLint attributeMaxLength = 0;
 	glGetProgramiv(program, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &attributeMaxLength);
-	
+
 	GLint count = -1;
 	GLenum type = 0;
 	GLchar* attributeName = new GLchar[attributeMaxLength];

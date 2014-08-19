@@ -42,7 +42,7 @@ struct udev_monitor* mon;
 static int  udev_fd     = -1;
 
 static int  keyboard_fd = -1; // defaults to 0 ie console
-static int  mouse_fd    = -1; // defaults to 0 
+static int  mouse_fd    = -1; // defaults to 0
 
 // minimal map
 const int lowercase_map[] = {
@@ -54,7 +54,7 @@ const int lowercase_map[] = {
     0,  0,  0,   0,   0,   0,   0,  0,   0,  0,  0,  0, 0,  0, 0,
     0,  0,  0,   0,   0,   0,   0,  0,   0,  0,  0,  0, 0,  0, 0,
     0,  0,  0,   0,   0,   0,   0,  0,   0,  0,  0,  '\r'
- 
+
 };
 
 // minimal keyboard map
@@ -135,7 +135,7 @@ static int filter_mouse(const struct dirent *d) {
 static const struct {
   unsigned int   width;
   unsigned int   height;
-  unsigned int   bpp; /* 2:RGB16, 3:RGB, 4:RGBA */ 
+  unsigned int   bpp; /* 2:RGB16, 3:RGB, 4:RGBA */
   unsigned char  rle_pixel_data[382 + 1];
 } mouse_cursor_data = {
   12, 19, 4,
@@ -235,7 +235,7 @@ ofAppEGLWindow::Settings::Settings() {
 }
 
 // TODO. we may not need these to be static, but we will
-// leave it this way for now in case future EGL windows 
+// leave it this way for now in case future EGL windows
 // use static callbacks (like glut)
 
 //------------------------------------------------------------
@@ -373,7 +373,7 @@ void ofAppEGLWindow::exit(ofEventArgs &e) {
   terminate = true; // TODO, it is unlikely that this will happen
   if(!isUsingX11) {
     destroyNativeEvents();
-  }   
+  }
 
   // we got a terminate ... so clean up.
   destroySurface();
@@ -442,7 +442,7 @@ void ofAppEGLWindow::setGLESVersion(int _glesVersion){
 //------------------------------------------------------------
 void ofAppEGLWindow::setupOpenGL(int w, int h, int screenMode) {
 
-    // we set this here, and if we need to make a fullscreen 
+    // we set this here, and if we need to make a fullscreen
     // app, we do it during the first loop.
      windowMode = screenMode;
      bShowCursor = true;
@@ -466,7 +466,7 @@ void ofAppEGLWindow::setupOpenGL(int w, int h, int screenMode) {
     if(!isWindowInited) {
       ofLogError("ofAppEGLWindow")  << "setupOpenGL(): screen creation failed, window not inited";
     }
-    
+
     setupPeripherals();
 
     ofLogNotice("ofAppEGLWindow")  << "setupOpenGL(): peripheral setup complete";
@@ -497,7 +497,7 @@ bool ofAppEGLWindow::createSurface() {
 
   ofLogNotice("ofAppEGLWindow") << "createSurface(): setting up EGL Display";
     // get an EGL eglDisplay connection
-    
+
     isSurfaceInited = false;
 
     EGLint result;
@@ -516,8 +516,8 @@ bool ofAppEGLWindow::createSurface() {
     }
 
     // initialize the EGL eglDisplay connection
-    result = eglInitialize(eglDisplay, 
-                           &eglVersionMajor, 
+    result = eglInitialize(eglDisplay,
+                           &eglVersionMajor,
                            &eglVersionMinor);
 
     if(result == EGL_BAD_DISPLAY) {
@@ -555,7 +555,7 @@ bool ofAppEGLWindow::createSurface() {
       glesVersionForContext = 1;
       ofLogNotice("ofAppEGLWindow") << "createSurface(): default renderer detected";
     }
-    
+
     ofEGLAttributeListIterator iter, iterEnd;
     int i;
 
@@ -577,10 +577,10 @@ bool ofAppEGLWindow::createSurface() {
 
     // get an appropriate EGL frame buffer configuration
     // http://www.khronos.org/registry/egl/sdk/docs/man/xhtml/eglChooseConfig.html
-    result = eglChooseConfig(eglDisplay, 
-                             attribute_list_framebuffer_config, 
-                             &eglConfig, 
-                             1, // we only want the first one.  if we want more, 
+    result = eglChooseConfig(eglDisplay,
+                             attribute_list_framebuffer_config,
+                             &eglConfig,
+                             1, // we only want the first one.  if we want more,
                                 // we need to pass in an array.
                                 // we are optimistic and don't give it more chances
                                 // to find a good configuration
@@ -612,16 +612,16 @@ bool ofAppEGLWindow::createSurface() {
     attribute_list_window_surface[i] = EGL_NONE; // add the terminator
 
     // create a surface
-    eglSurface = eglCreateWindowSurface( eglDisplay, // our display handle 
+    eglSurface = eglCreateWindowSurface( eglDisplay, // our display handle
                                          eglConfig,    // our first config
                                          nativeWindow, // our native window
                                          attribute_list_window_surface); // surface attribute list
-    
+
     if(eglSurface == EGL_NO_SURFACE) {
         EGLint error = eglGetError();
         switch(error) {
             case EGL_BAD_MATCH:
-                ofLogError("ofAppEGLWindow") << "createSurface(): error creating surface: EGL_BAD_MATCH " << eglErrorString(error);  
+                ofLogError("ofAppEGLWindow") << "createSurface(): error creating surface: EGL_BAD_MATCH " << eglErrorString(error);
                 ofLogError("ofAppEGLWindow") << "createSurface(): check window and EGLConfig attributes to determine compatibility, ";
                 ofLogError("ofAppEGLWindow") << "createSurface(): or verify that the EGLConfig supports rendering to a window";
                  break;
@@ -639,7 +639,7 @@ bool ofAppEGLWindow::createSurface() {
                  break;
              default:
               ofLogError("ofAppEGLWindow") << "createSurface(): error creating surface: << " << error << eglErrorString(error);
-           } 
+           }
 
         return false;
     }else{
@@ -656,15 +656,15 @@ bool ofAppEGLWindow::createSurface() {
       ofLogNotice("ofAppEGLWindow") << "createSurface(): API bound correctly";
   }
 
-  // create an EGL rendering eglContext  
+  // create an EGL rendering eglContext
   EGLint attribute_list_surface_context[] = {
     EGL_CONTEXT_CLIENT_VERSION, glesVersionForContext,
     EGL_NONE
   };
 
-    eglContext = eglCreateContext(eglDisplay, 
-                                  eglConfig, 
-                                  EGL_NO_CONTEXT, 
+    eglContext = eglCreateContext(eglDisplay,
+                                  eglConfig,
+                                  EGL_NO_CONTEXT,
                                   attribute_list_surface_context);
 
     if(eglContext == EGL_NO_CONTEXT) {
@@ -679,7 +679,7 @@ bool ofAppEGLWindow::createSurface() {
     }
 
     // connect the eglContext to the eglSurface
-    result = eglMakeCurrent(eglDisplay, 
+    result = eglMakeCurrent(eglDisplay,
                             eglSurface, // draw surface
                             eglSurface, // read surface
                             eglContext);
@@ -732,7 +732,7 @@ bool ofAppEGLWindow::destroySurface() {
         eglConfig  = NULL;
         eglVersionMinor = -1;
         eglVersionMinor = -1;
-        
+
         return true;
     } else {
         ofLogError("ofAppEGLWindow") << "destroySurface(): attempted to destroy uninitialized window";
@@ -784,10 +784,10 @@ void ofAppEGLWindow::runAppViaInfiniteLoop(ofBaseApp *appPtr) {
    ofLogNotice("ofAppEGLWindow") << "runAppViaInfiniteLoop(): entering infinite loop";
 
     ofAppPtr = appPtr; // make a local copy
- 
+
     ofNotifySetup();
     ofLogNotice("ofAppEGLWindow") << "runAppViaInfiniteLoop(): setting up notifications complete";
- 
+
     // loop it!
     while (!terminate) {
       checkEvents();
@@ -809,8 +809,8 @@ void ofAppEGLWindow::setupNativeEvents() {
 //------------------------------------------------------------
 void ofAppEGLWindow::destroyNativeEvents() {
   destroyNativeUDev();
-  destroyNativeMouse(); 
-  destroyNativeKeyboard(); 
+  destroyNativeMouse();
+  destroyNativeKeyboard();
   waitForThread(true, threadTimeout);
 }
 
@@ -827,7 +827,7 @@ void ofAppEGLWindow::setWindowRect(const ofRectangle& requestedWindowRect) {
         ofRectangle oldWindowRect = currentWindowRect;
 
         if(isUsingX11) {
-          int ret = XMoveResizeWindow(x11Display, 
+          int ret = XMoveResizeWindow(x11Display,
                                       x11Window,
                                       (int)newRect.x,
                                       (int)newRect.y,
@@ -857,7 +857,7 @@ void ofAppEGLWindow::setWindowRect(const ofRectangle& requestedWindowRect) {
           src_rect.height = (int32_t)newRect.height << 16;
 
           DISPMANX_UPDATE_HANDLE_T dispman_update = vc_dispmanx_update_start(0);
-          
+
           vc_dispmanx_element_change_attributes(dispman_update,
                                                 dispman_element,
                                                 ELEMENT_CHANGE_SRC_RECT|ELEMENT_CHANGE_DEST_RECT, // we do both when resizing
@@ -932,7 +932,7 @@ void ofAppEGLWindow::checkEvents(){
             }else{
                 break;
             }
-        }    
+        }
     } else {
         static queue<ofMouseEventArgs> mouseEventsCopy;
         lock();
@@ -1055,7 +1055,7 @@ void ofAppEGLWindow::setWindowPosition(int x, int y){
   }
 
   if(isUsingX11) {
-      int ret = XMoveWindow(x11Display, 
+      int ret = XMoveWindow(x11Display,
                            x11Window,
                            x,
                            y);
@@ -1083,7 +1083,7 @@ void ofAppEGLWindow::setWindowPosition(int x, int y){
     dst_rect.height = (int32_t)currentWindowRect.height;
 
     dispman_update = vc_dispmanx_update_start(0);
-    
+
     vc_dispmanx_element_change_attributes(dispman_update,
                                           dispman_native_window.element,
                                           ELEMENT_CHANGE_DEST_RECT,
@@ -1119,7 +1119,7 @@ void ofAppEGLWindow::setWindowShape(int w, int h){
   }
 
   if(isUsingX11) {
-      int ret = XResizeWindow(x11Display, 
+      int ret = XResizeWindow(x11Display,
                            x11Window,
                            (unsigned int)w,
                            (unsigned int)h);
@@ -1203,14 +1203,14 @@ void ofAppEGLWindow::display() {
 
   ///////////////////////////////////////////////////////////////////////////////////////
   // set viewport, clear the screen
- 
-  ofPtr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
+
+  std::shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
   if(renderer){
    renderer->startRender();
   }
 
   ofViewport(0, 0, getWindowWidth(), getWindowHeight());    // used to be glViewport( 0, 0, width, height );
-  
+
   float * bgPtr = ofBgColorPtr();
   bool bClearAuto = ofbClearBg();
 
@@ -1221,22 +1221,22 @@ void ofAppEGLWindow::display() {
   if( bEnableSetupScreen ) ofSetupScreen(); // this calls into the current renderer (ofSetupScreenPerspective)
 
   ofNotifyDraw();
-  
+
   if(!isUsingX11) {
     if(bShowCursor){
-        
+
         GLboolean bIsDepthTestEnabled = GL_FALSE;
         glGetBooleanv(GL_DEPTH_TEST, &bIsDepthTestEnabled);
 
         if(bIsDepthTestEnabled == GL_TRUE) {
             glDisable(GL_DEPTH_TEST);
         }
-        
+
         bool isUsingNormalizedTexCoords = ofGetUsingNormalizedTexCoords();
         if(isUsingNormalizedTexCoords) {
           ofDisableNormalizedTexCoords();
         }
-        
+
         ofPushStyle();
         ofEnableAlphaBlending();
         ofDisableTextureEdgeHack();
@@ -1245,7 +1245,7 @@ void ofAppEGLWindow::display() {
         ofEnableTextureEdgeHack();
         //TODO: we need a way of querying the previous state of texture hack
         ofPopStyle();
-        
+
         if(bIsDepthTestEnabled == GL_TRUE) {
             glEnable(GL_DEPTH_TEST);
         }
@@ -1257,11 +1257,11 @@ void ofAppEGLWindow::display() {
 
     }
    }
- 
+
   if(renderer) {
     renderer->finishRender();
   }
-  
+
   EGLBoolean success = eglSwapBuffers(eglDisplay, eglSurface);
   if(!success) {
        GLint error = eglGetError();
@@ -1288,7 +1288,7 @@ void ofAppEGLWindow::threadedFunction(){
     // set the thread to low priority
     getPocoThread().setOSPriority(Poco::Thread::getMinOSPriority());
 
-    // TODO: a way to setup mouse and keyboard if 
+    // TODO: a way to setup mouse and keyboard if
     // they are not plugged in upon start
     // This can be done with our udev device callbacks
 
@@ -1301,14 +1301,14 @@ void ofAppEGLWindow::threadedFunction(){
         ofSleepMillis(20);
   }
 }
- 
+
 //------------------------------------------------------------
 // PLATFORM SPECIFIC RPI
 //------------------------------------------------------------
 
 //------------------------------------------------------------
 void ofAppEGLWindow::setupNativeUDev() {
- 
+
     udev = udev_new(); // create new udev object
     if(!udev) {
         ofLogError("ofAppEGLWindow") << "setupNativeUDev(): couldn't create udev object";
@@ -1382,7 +1382,7 @@ void ofAppEGLWindow::setupNativeKeyboard() {
         devicePathBuffer.append(eps[0]->d_name);
         keyboard_fd = open(devicePathBuffer.c_str(), O_RDONLY | O_NONBLOCK);
         ofLogNotice("ofAppEGLWindow") << "setupKeyboard(): keyboard_fd= " <<  keyboard_fd << " devicePath=" << devicePathBuffer;
-		
+
     } else {
         ofLogWarning("ofAppEGLWindow") << "setupKeyboard(): unabled to find keyboard";
     }
@@ -1391,7 +1391,7 @@ void ofAppEGLWindow::setupNativeKeyboard() {
         char deviceNameBuffer[256] = "Unknown Device";
         ioctl(keyboard_fd, EVIOCGNAME(sizeof(deviceNameBuffer)), deviceNameBuffer);
         ofLogNotice("ofAppEGLWindow") << "setupKeyboard(): keyboard device name = " << deviceNameBuffer;
-    
+
 
         // save current terminal settings
         tcgetattr (STDIN_FILENO, &tc);
@@ -1407,7 +1407,7 @@ void ofAppEGLWindow::setupNativeKeyboard() {
 
     kb.shiftPressed = false;
     kb.capsLocked = false;
-    
+
     if(keyboard_fd < 0) {
         ofLogError("ofAppEGLWindow") << "setupKeyboard(): did not open keyboard, keyboard_fd < 0";
     }else {
@@ -1465,7 +1465,7 @@ void ofAppEGLWindow::readNativeUDevEvents() {
         }
         else {
             ofLogNotice("ofAppEGLWindow") << "readNativeUDevEvents(): device returned by receive_device() is NULL";
-        }                   
+        }
     }
 }
 
@@ -1632,11 +1632,11 @@ void ofAppEGLWindow::readNativeKeyboardEvents() {
                 }
             }
         } else if(ev.type == EV_MSC) {
-            // EV_MSC events are used for input and output events that 
+            // EV_MSC events are used for input and output events that
             // do not fall under other categories.
             // ofLogVerbose("ofAppEGLWindow") << "readKeyboardEvents(): EV_MSC";
         } else if(ev.type == EV_SYN ) {
-            // EV_SYN Used as markers to separate events. Events may be 
+            // EV_SYN Used as markers to separate events. Events may be
             // separated in time or in space, such as with the multitouch protocol.
             // ofLogVerbose("ofAppEGLWindow") << "readKeyboardEvents(): EV_SYN";
         } else {
@@ -1677,7 +1677,7 @@ void ofAppEGLWindow::readNativeMouseEvents() {
             switch(axis) {
                 case 0:
                     if(ev.type == EV_REL) {
-                        mouseEvent.x += amount * mouseScaleX; 
+                        mouseEvent.x += amount * mouseScaleX;
                     } else {
                         mouseEvent.x = amount * mouseScaleX;
                     }
@@ -1687,7 +1687,7 @@ void ofAppEGLWindow::readNativeMouseEvents() {
                     break;
                 case 1:
                     if(ev.type == EV_REL) {
-                        mouseEvent.y += amount * mouseScaleY; 
+                        mouseEvent.y += amount * mouseScaleY;
                     } else {
                         mouseEvent.y = amount * mouseScaleY;
                     }
@@ -1749,11 +1749,11 @@ void ofAppEGLWindow::readNativeMouseEvents() {
             }
             // not sure why we are getting that event here
         } else if(ev.type == EV_MSC) {
-            // EV_MSC events are used for input and output events that 
+            // EV_MSC events are used for input and output events that
             // do not fall under other categories.
             // ofLogVerbose("ofAppEGLWindow") << "readMouseEvents() : EV_MSC";
         } else if(ev.type == EV_SYN ) {
-            // EV_SYN Used as markers to separate events. Events may be 
+            // EV_SYN Used as markers to separate events. Events may be
             // separated in time or in space, such as with the multitouch protocol.
 
             // EV_SYN events are sent when axis value (one or a pair) are changed
@@ -1766,7 +1766,7 @@ void ofAppEGLWindow::readNativeMouseEvents() {
                     // just moving
                     mouseEvent.type = ofMouseEventArgs::Moved;
                 }
-                
+
                 mouseEvent.button = mb.mouseButtonState;
 
                 pushMouseEvent = true;
@@ -1817,7 +1817,7 @@ bool ofAppEGLWindow::createRPiNativeWindow(const ofRectangle& requestedWindowRec
 
   ofRectangle screenRect = getScreenRect();
 
-  // make sure our requested window rectangle does not exceed the native 
+  // make sure our requested window rectangle does not exceed the native
   // screen size, or start outside of it.
   ofRectangle windowRect = screenRect.getIntersection(requestedWindowRect);
 
@@ -1851,21 +1851,21 @@ bool ofAppEGLWindow::createRPiNativeWindow(const ofRectangle& requestedWindowRec
 
     // get the zero display
     dispman_display = vc_dispmanx_display_open(settings.screenNum);
-    
+
     // begin the display manager interaction
     dispman_update  = vc_dispmanx_update_start( 0 );
 
-    // add a "display manager element" with our parameters so 
+    // add a "display manager element" with our parameters so
     // that it can fill in the structures.  we will pass this
     // filled dispman_element to our native window, which will
     // be used to construct the EGL surface, etc.
-    dispman_element = vc_dispmanx_element_add ( dispman_update, 
+    dispman_element = vc_dispmanx_element_add ( dispman_update,
                                                 dispman_display,
-                                                settings.layer, // layer 
+                                                settings.layer, // layer
                                                 &dst_rect, // dst rect
                                                 (DISPMANX_RESOURCE_HANDLE_T)0, // src
                                                 &src_rect, // src rect
-                                                DISPMANX_PROTECTION_NONE, // ? 
+                                                DISPMANX_PROTECTION_NONE, // ?
                                                 &dispman_alpha, // alpha
                                                 &dispman_clamp, // clamp
                                                 dispman_transform // transform
@@ -1917,10 +1917,10 @@ bool ofAppEGLWindow::createX11NativeWindow(const ofRectangle& requestedWindowRec
   XSetWindowAttributes sWA;
   unsigned int         ui32Mask;
   int                  i32Depth;
-  
+
   //ofRectangle screenRect = getScreenRect();
 
-  // make sure our requested window rectangle does not exceed the native 
+  // make sure our requested window rectangle does not exceed the native
   // screen size, or start outside of it.
   ofRectangle windowRect = requestedWindowRect.getStandardized();//screenRect.getIntersection(requestedWindowRect);
 
@@ -1930,7 +1930,7 @@ bool ofAppEGLWindow::createX11NativeWindow(const ofRectangle& requestedWindowRec
     ofLogError("ofAppEGLWindow") << "unable to open X display";
     return false;
   }
- 
+
   x11ScreenNum = XDefaultScreen( x11Display );
 
   x11Screen = XDefaultScreenOfDisplay(x11Display);
@@ -1940,10 +1940,10 @@ bool ofAppEGLWindow::createX11NativeWindow(const ofRectangle& requestedWindowRec
   i32Depth = DefaultDepth(x11Display, x11ScreenNum);
   x11Visual = new XVisualInfo(); // TODO does this need to be deleted?
 
-  XMatchVisualInfo( x11Display, 
-                    x11ScreenNum, 
-                    i32Depth, 
-                    TrueColor, 
+  XMatchVisualInfo( x11Display,
+                    x11ScreenNum,
+                    i32Depth,
+                    TrueColor,
                     x11Visual);
 
   if (!x11Visual) {
@@ -1967,40 +1967,40 @@ bool ofAppEGLWindow::createX11NativeWindow(const ofRectangle& requestedWindowRec
   sWA.event_mask |= PointerMotionMask;
   sWA.event_mask |= KeyPressMask;
   sWA.event_mask |= KeyReleaseMask;
- 
+
   // setup background pixel attributes
   ui32Mask = 0;
   ui32Mask |= CWBackPixel;
-  ui32Mask |= CWBorderPixel; 
-  ui32Mask |= CWEventMask; 
+  ui32Mask |= CWBorderPixel;
+  ui32Mask |= CWEventMask;
   ui32Mask |= CWColormap;
 
   // Creates the X11 window
   x11Window = XCreateWindow(x11Display, // Specifies the connection to the X server.
                             sRootWindow, // Specifies the parent window.
-                            (int)windowRect.x, (int)windowRect.y, // Specify the x and y coordinates, 
-                            // which are the top-left outside corner 
-                            // of the window's borders and are relative 
-                            // to the inside of the parent window's borders. 
-                            (unsigned int)windowRect.width, (unsigned int)windowRect.height, // Specify the width and height, which are the 
-                            // created window's inside dimensions and do 
+                            (int)windowRect.x, (int)windowRect.y, // Specify the x and y coordinates,
+                            // which are the top-left outside corner
+                            // of the window's borders and are relative
+                            // to the inside of the parent window's borders.
+                            (unsigned int)windowRect.width, (unsigned int)windowRect.height, // Specify the width and height, which are the
+                            // created window's inside dimensions and do
                             // not include the created window's borders.
-                            0, // Specifies the width of the created 
+                            0, // Specifies the width of the created
                             // window's border in pixels.
-                            CopyFromParent, // Specifies the window's depth. 
-                            // A depth of CopyFromParent means 
-                            // the depth is taken from the parent. 
-                            InputOutput, // Specifies the created window's class. 
-                            // You can pass InputOutput, InputOnly, 
-                            // or CopyFromParent. A class of CopyFromParent 
+                            CopyFromParent, // Specifies the window's depth.
+                            // A depth of CopyFromParent means
+                            // the depth is taken from the parent.
+                            InputOutput, // Specifies the created window's class.
+                            // You can pass InputOutput, InputOnly,
+                            // or CopyFromParent. A class of CopyFromParent
                             // means the class is taken from the parent.
-                            CopyFromParent, // Specifies the visual type. 
-                            // A visual of CopyFromParent means the visual type 
+                            CopyFromParent, // Specifies the visual type.
+                            // A visual of CopyFromParent means the visual type
                             // is taken from the parent.
-                            ui32Mask, // Specifies which window attributes are 
+                            ui32Mask, // Specifies which window attributes are
                             // defined in the attributes argument. This mask is
-                            // the bitwise inclusive OR of the valid attribute 
-                            // mask bits. If valuemask is zero, the attributes 
+                            // the bitwise inclusive OR of the valid attribute
+                            // mask bits. If valuemask is zero, the attributes
                             // are ignored and are not referenced.
                             &sWA //Specifies the background pixel value of the window.
                             );
@@ -2008,7 +2008,7 @@ bool ofAppEGLWindow::createX11NativeWindow(const ofRectangle& requestedWindowRec
   XMapWindow(x11Display, x11Window);
   XFlush(x11Display);
 
-  // check success?  
+  // check success?
   currentWindowRect = windowRect;
 
   return true;
@@ -2087,7 +2087,7 @@ void ofAppEGLWindow::handleX11Event(const XEvent& event){
     static ofKeyEventArgs keyEvent;
     switch (event.type){
         case KeyPress:
-        case KeyRelease: 
+        case KeyRelease:
             {
                 KeySym key = KeyCodeToKeySym(x11Display,event.xkey.keycode,event.xkey.state);
                 keyEvent.key = key;
@@ -2099,7 +2099,7 @@ void ofAppEGLWindow::handleX11Event(const XEvent& event){
                 } else if (event.type == KeyRelease){
                     keyEvent.type = ofKeyEventArgs::Released;
                 }
-                
+
                 ofNotifyKeyEvent(keyEvent);
             }
             break;
@@ -2113,7 +2113,7 @@ void ofAppEGLWindow::handleX11Event(const XEvent& event){
             } else {
                 mouseEvent.type = ofMouseEventArgs::Released;
             }
-            
+
             ofNotifyMouseEvent(mouseEvent);
             break;
         case MotionNotify:
@@ -2126,7 +2126,7 @@ void ofAppEGLWindow::handleX11Event(const XEvent& event){
             } else {
                 mouseEvent.type = ofMouseEventArgs::Moved;
             }
-            
+
             ofNotifyMouseEvent(mouseEvent);
             break;
         case ConfigureNotify:

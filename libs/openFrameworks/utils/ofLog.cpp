@@ -16,9 +16,9 @@ static map<string,ofLogLevel> & getModules(){
 static void noopDeleter(ofBaseLoggerChannel*){}
 #ifdef TARGET_ANDROID
 	#include "ofxAndroidLogChannel.h"
-	shared_ptr<ofBaseLoggerChannel> ofLog::channel = shared_ptr<ofxAndroidLogChannel>(new ofxAndroidLogChannel,std::ptr_fun(noopDeleter));
+	std::shared_ptr<ofBaseLoggerChannel> ofLog::channel = std::shared_ptr<ofxAndroidLogChannel>(new ofxAndroidLogChannel,std::ptr_fun(noopDeleter));
 #else
-	shared_ptr<ofBaseLoggerChannel> ofLog::channel = shared_ptr<ofConsoleLoggerChannel>(new ofConsoleLoggerChannel,std::ptr_fun(noopDeleter));
+	std::shared_ptr<ofBaseLoggerChannel> ofLog::channel = std::shared_ptr<ofConsoleLoggerChannel>(new ofConsoleLoggerChannel,std::ptr_fun(noopDeleter));
 #endif
 
 //--------------------------------------------------
@@ -38,12 +38,12 @@ ofLogLevel ofGetLogLevel(){
 
 //--------------------------------------------------
 void ofLogToFile(const string & path, bool append){
-	ofLog::setChannel(shared_ptr<ofFileLoggerChannel>(new ofFileLoggerChannel(path,append)));
+	ofLog::setChannel(std::shared_ptr<ofFileLoggerChannel>(new ofFileLoggerChannel(path,append)));
 }
 
 //--------------------------------------------------
 void ofLogToConsole(){
-	ofLog::setChannel(shared_ptr<ofConsoleLoggerChannel>(new ofConsoleLoggerChannel,std::ptr_fun(noopDeleter)));
+	ofLog::setChannel(std::shared_ptr<ofConsoleLoggerChannel>(new ofConsoleLoggerChannel,std::ptr_fun(noopDeleter)));
 }
 
 //--------------------------------------------------
@@ -52,7 +52,7 @@ ofLog::ofLog(){
 	module = "";
 	bPrinted = false;
 }
-		
+
 //--------------------------------------------------
 ofLog::ofLog(ofLogLevel _level){
 	level = _level;
@@ -223,11 +223,11 @@ ofLogFatalError::ofLogFatalError(const string & module, const char* format, ...)
 }
 
 //--------------------------------------------------
-void ofLog::setChannel(shared_ptr<ofBaseLoggerChannel> _channel){
+void ofLog::setChannel(std::shared_ptr<ofBaseLoggerChannel> _channel){
 	channel = _channel;
 }
 
-void ofSetLoggerChannel(shared_ptr<ofBaseLoggerChannel> loggerChannel){
+void ofSetLoggerChannel(std::shared_ptr<ofBaseLoggerChannel> loggerChannel){
 	ofLog::setChannel(loggerChannel);
 }
 
@@ -252,7 +252,7 @@ string ofGetLogLevelName(ofLogLevel level, bool pad){
 
 //--------------------------------------------------
 void ofConsoleLoggerChannel::log(ofLogLevel level, const string & module, const string & message){
-	// print to cerr for OF_LOG_ERROR and OF_LOG_FATAL_ERROR, everything else to cout 
+	// print to cerr for OF_LOG_ERROR and OF_LOG_FATAL_ERROR, everything else to cout
 	ostream& out = level < OF_LOG_ERROR ? cout : cerr;
 	out << "[" << ofGetLogLevelName(level, true)  << "] ";
 	// only print the module name if it's not ""

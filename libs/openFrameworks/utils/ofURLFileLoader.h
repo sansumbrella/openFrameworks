@@ -76,7 +76,7 @@ class ofBaseURLFileLoader;
 
 class ofURLFileLoader  {
     public:
-        ofURLFileLoader();	
+        ofURLFileLoader();
         ofHttpResponse get(string url);
         int getAsync(string url, string name=""); // returns id
         ofHttpResponse saveTo(string url, string path);
@@ -86,5 +86,5 @@ class ofURLFileLoader  {
         void stop();
 
     private:
-        shared_ptr<ofBaseURLFileLoader> impl;
+        std::shared_ptr<ofBaseURLFileLoader> impl;
 };

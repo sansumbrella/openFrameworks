@@ -196,7 +196,7 @@ ofTextureData& ofTexture::getTextureData(){
 	if(!texData.bAllocated){
 		ofLogError("ofTexture") << "getTextureData(): texture has not been allocated";
 	}
-	
+
 	return texData;
 }
 
@@ -204,7 +204,7 @@ const ofTextureData& ofTexture::getTextureData() const {
 	if(!texData.bAllocated){
 		ofLogError("ofTexture") << "getTextureData(): texture has not been allocated";
 	}
-	
+
 	return texData;
 }
 
@@ -298,12 +298,12 @@ void ofTexture::allocate(int w, int h, int internalGlDataType, bool bUseARBExten
 #ifndef TARGET_OPENGLES
 	if (bUseARBExtention && GL_ARB_texture_rectangle){
 		texData.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
-	} else 
+	} else
 #endif
 	{
 		texData.textureTarget = GL_TEXTURE_2D;
 	}
-	
+
 	allocate(texData,glFormat,pixelType);
 }
 
@@ -491,52 +491,52 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 	if(w > texData.tex_w || h > texData.tex_h) {
 		allocate(w, h, glFormat, glFormat, glType);
 	}
-	
+
 	// compute new tex co-ords based on the ratio of data's w, h to texture w,h;
 #ifndef TARGET_OPENGLES
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
 		texData.tex_t = w;
 		texData.tex_u = h;
-	} else 
+	} else
 #endif
 	{
 		texData.tex_t = (float)(w) / (float)texData.tex_w;
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
-	
+
 	// bind texture
 	glBindTexture(texData.textureTarget, (GLuint) texData.textureID);
 	//update the texture image:
 	glTexSubImage2D(texData.textureTarget, 0, 0, 0, w, h, glFormat, glType, data);
 	// unbind texture target by binding 0
 	glBindTexture(texData.textureTarget, 0);
-	
+
 	if (bWantsMipmap) {
 		// auto-generate mipmap, since this ofTexture wants us to.
 		generateMipmap();
 	}
-	
+
 }
 
 //----------------------------------------------------------
 void ofTexture::generateMipmap(){
 
 	// Generate mipmaps using hardware-accelerated core GL methods.
-	
+
 	// 1. Check whether the current OpenGL version supports mipmap generation:
 	//    glGenerateMipmap() was introduced to OpenGL core in 3.0, and
 	//    OpenGLES core in 2.0 but earlier versions may support it if they
 	//	  support extension GL_EXT_framebuffer_object
 
 	bool isGlGenerateMipmapAvailable = false;
-	
+
 #ifdef TARGET_OPENGLES
 	if (ofGetOpenGLESVersion() >= 2) isGlGenerateMipmapAvailable = true;
 #else
 	if (ofGetOpenGLVersionMajor() >= 3) isGlGenerateMipmapAvailable = true;
 #endif
-	
-	
+
+
 	if (!isGlGenerateMipmapAvailable && !ofGLCheckExtension("GL_EXT_framebuffer_object")) {
 		static bool versionWarningIssued = false;
 		if (!versionWarningIssued) ofLogWarning() << "Your current OpenGL version does not support mipmap generation via glGenerateMipmap().";
@@ -546,7 +546,7 @@ void ofTexture::generateMipmap(){
 	}
 
 	// 2. Check whether the texture's texture target supports mipmap generation.
-	
+
 	switch (texData.textureTarget) {
 			/// OpenGL ES only supports mipmap for the following two texture targets:
 		case GL_TEXTURE_2D:
@@ -560,7 +560,7 @@ void ofTexture::generateMipmap(){
 #endif
 		{
 			// All good, this particular texture target supports mipmaps.
-			
+
 			// glEnable(texData.textureTarget);	/// < uncomment this hack if you are unlucky enough to run an older ATI card.
 			// See also: https://www.opengl.org/wiki/Common_Mistakes#Automatic_mipmap_generation
 
@@ -574,7 +574,7 @@ void ofTexture::generateMipmap(){
 		{
 			// This particular texture target does not support mipmaps.
 			static bool warningIssuedAlready = false;
-			
+
 			if (!warningIssuedAlready){
 				ofLogWarning() << "Mipmaps are not supported for textureTarget 0x" << hex << texData.textureTarget << endl
 				<< "Most probably you are trying to create mipmaps from a GL_TEXTURE_RECTANGLE texture." << endl
@@ -585,48 +585,48 @@ void ofTexture::generateMipmap(){
 			break;
 		}
 	} // end switch(texData.textureTarget)
-		
+
 }
 
 //----------------------------------------------------------
 void ofTexture::loadScreenData(int x, int y, int w, int h){
-	
+
 	int screenHeight = ofGetViewportHeight(); // this call fails if we are in a different viewport or FBO: ofGetHeight();
 	y = screenHeight - y;
 	y -= h; // top, bottom issues
 	texData.bFlipTexture = true;
-	
+
 	if ( w > texData.tex_w || h > texData.tex_h) {
 		ofLogError("ofTexture") << "loadScreenData(): " << w << "x" << h << " image data too big for "
 		<< texData.tex_w << "x " << texData.tex_h << " allocated texture, not uploading";
 		return;
 	}
-	
+
 	//update our size with the new dimensions - this should be the same size or smaller than the allocated texture size
 	texData.width 	= w;
 	texData.height 	= h;
 	//texData.glType  = GL_RGB; // this was probably a bug, because you might be resetting the glType to something other than what the texture was created for
-	
+
 	//compute new tex co-ords based on the ratio of data's w, h to texture w,h;
 #ifndef TARGET_OPENGLES // DAMIAN
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
 		texData.tex_t = (float)(w);
 		texData.tex_u = (float)(h);
-	} else 
+	} else
 #endif
 	{
 		texData.tex_t = (float)(w) / (float)texData.tex_w;
 		texData.tex_u = (float)(h) / (float)texData.tex_h;
 	}
-	
-	
+
+
 	enableTextureTarget(0);
 
 	glBindTexture(texData.textureTarget, (GLuint)texData.textureID);
 	glCopyTexSubImage2D(texData.textureTarget, 0,0,0,x,y,w,h);
 
 	disableTextureTarget(0);
-	
+
 	if (bWantsMipmap) {
 		generateMipmap();
 	}
@@ -640,7 +640,7 @@ void ofTexture::loadScreenData(int x, int y, int w, int h){
 void ofTexture::setAnchorPercent(float xPct, float yPct){
 	anchor.x  = xPct;
 	anchor.y  = yPct;
-	
+
 	bAnchorIsPct = true;
 }
 
@@ -648,7 +648,7 @@ void ofTexture::setAnchorPercent(float xPct, float yPct){
 void ofTexture::setAnchorPoint(float x, float y){
 	anchor.x = x;
 	anchor.y = y;
-	
+
 	bAnchorIsPct = false;
 }
 
@@ -660,25 +660,25 @@ void ofTexture::resetAnchor(){
 
 //----------------------------------------------------------
 void ofTexture::bind(int textureLocation){
-	//we could check if it has been allocated - but we don't do that in draw() 
+	//we could check if it has been allocated - but we don't do that in draw()
 	if(texData.alphaMask){
 		ofGetGLRenderer()->setAlphaMaskTex(*texData.alphaMask);
 	}
 	enableTextureTarget(textureLocation);
-	
+
 
 	if(ofGetUsingNormalizedTexCoords()) {
 		ofSetMatrixMode(OF_MATRIX_TEXTURE);
 		ofPushMatrix();
 		ofMatrix4x4 m;
-		
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 		if(texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB)
 			m.makeScaleMatrix(texData.width, texData.height, 1.0f);
-		else 
-#endif			
+		else
+#endif
 			m.makeScaleMatrix(texData.width / texData.tex_w, texData.height / texData.tex_h, 1.0f);
-		
+
 		ofLoadMatrix(m);
 		ofSetMatrixMode(OF_MATRIX_MODELVIEW);
 	}
@@ -713,7 +713,7 @@ void ofTexture::setAlphaMask(ofTexture & mask){
 	if(mask.texData.textureTarget!=this->texData.textureTarget){
 		ofLogError("ofTexture") << "Cannot set alpha mask with different texture target";
 	}else{
-		texData.alphaMask = shared_ptr<ofTexture>(new ofTexture(mask));
+		texData.alphaMask = std::shared_ptr<ofTexture>(new ofTexture(mask));
 	}
 }
 
@@ -726,37 +726,37 @@ void ofTexture::disableAlphaMask(){
 
 //----------------------------------------------------------
 ofPoint ofTexture::getCoordFromPoint(float xPos, float yPos){
-	
+
 	ofPoint temp;
-	
+
 	if (!bAllocated()) return temp;
-	
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
-		
+
 		temp.set(xPos, yPos);
-		
+
 	} else {
-#endif		
-		// non arb textures are 0 to 1, so we 
-		// (a) convert to a pct: 
-		
+#endif
+		// non arb textures are 0 to 1, so we
+		// (a) convert to a pct:
+
 		float pctx = xPos / texData.width;
 		float pcty = yPos / texData.height;
-		
+
 		// (b) mult by our internal pct (since we might not be 0-1 internally)
-		
+
 		pctx *= texData.tex_t;
 		pcty *= texData.tex_u;
-		
+
 		temp.set(pctx, pcty);
-		
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	}
-#endif		
-	
+#endif
+
 	return temp;
-	
+
 }
 
 /// Sets a texture matrix that will be uploaded whenever the texture is
@@ -773,25 +773,25 @@ void ofTexture::disableTextureMatrix(){
 
 //----------------------------------------------------------
 ofPoint ofTexture::getCoordFromPercent(float xPct, float yPct){
-	
+
 	ofPoint temp;
-	
+
 	if (!bAllocated()) return temp;
-	
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
-		
+
 		temp.set(xPct * texData.width, yPct * texData.height);
-		
+
 	} else {
-#endif	
+#endif
 		xPct *= texData.tex_t;
 		yPct *= texData.tex_u;
 		temp.set(xPct, yPct);
-		
-#ifndef TARGET_OPENGLES	
+
+#ifndef TARGET_OPENGLES
 	}
-#endif	
+#endif
 	return temp;
 }
 
@@ -810,7 +810,7 @@ void ofTexture::setTextureWrap(GLint wrapModeHorizontal, GLint wrapModeVertical)
 void ofTexture::setTextureMinMagFilter(GLint minFilter, GLint magFilter){
 
 	// Issue warning if mipmaps not present for mipmap based min filter.
-	
+
 	if ( (minFilter > GL_LINEAR) && texData.hasMipmap == false ){
 		static bool hasWarnedNoMipmapsForMinFilter = false;
 		if(!hasWarnedNoMipmapsForMinFilter) {
@@ -822,7 +822,7 @@ void ofTexture::setTextureMinMagFilter(GLint minFilter, GLint magFilter){
 	}
 
 	// Issue warning if invalid magFilter specified.
-	
+
 	if ( (magFilter > GL_LINEAR ) ) {
 		static bool hasWarnedInvalidMagFilter = false;
 		if (!hasWarnedInvalidMagFilter) {
@@ -831,7 +831,7 @@ void ofTexture::setTextureMinMagFilter(GLint minFilter, GLint magFilter){
 		hasWarnedInvalidMagFilter = true;
 		return;
 	}
-	
+
 	bool wasBound = texData.isBound;
 	if (!wasBound) bind();
 	glTexParameteri(texData.textureTarget, GL_TEXTURE_MAG_FILTER, magFilter);
@@ -903,7 +903,7 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 	GLfloat py0 = y;
 	GLfloat px1 = w+x;
 	GLfloat py1 = h+y;
-	
+
 	if (texData.bFlipTexture == ofIsVFlipped()){
 		swap(py0,py1);
 	}
@@ -915,13 +915,13 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 		px1 -= w/2;
 		py1 -= h/2;
 	}
-	
+
 	//we translate our drawing points by our anchor point.
 	//we still respect ofRectMode so if you have rect mode set to
 	//OF_RECTMODE_CENTER your anchor will be relative to that.
 	GLfloat anchorX;
 	GLfloat anchorY;
-	
+
 	if(bAnchorIsPct){
 		anchorX = anchor.x * w;
 		anchorY = anchor.y * h;
@@ -929,13 +929,13 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 		anchorX = anchor.x;
 		anchorY = anchor.y;
 	}
-	
+
 	px0 -= anchorX;
 	py0 -= anchorY;
 	px1 -= anchorX;
 	py1 -= anchorY;
-	
-	
+
+
 	// -------------------------------------------------
 	// complete hack to remove border artifacts.
 	// slightly, slightly alters an image, scaling...
@@ -943,16 +943,16 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 	// we need a better solution for this, but
 	// to constantly add a 2 pixel border on all uploaded images
 	// is insane..
-	
+
 	GLfloat offsetw = 0.0f;
 	GLfloat offseth = 0.0f;
-	
+
 	if (!ofGLSupportsNPOTTextures() && bTexHackEnabled) {
 		offsetw = 1.0f / (texData.tex_w);
 		offseth = 1.0f / (texData.tex_h);
 	}
 	// -------------------------------------------------
-	
+
 	ofPoint topLeft = getCoordFromPoint(sx, sy);
 	ofPoint bottomRight = getCoordFromPoint(sx + sw, sy + sh);
 
@@ -965,7 +965,7 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 	quad.getVertices()[1].set(px1,py0,z);
 	quad.getVertices()[2].set(px1,py1,z);
 	quad.getVertices()[3].set(px0,py1,z);
-	
+
 	quad.getTexCoords()[0].set(tx0,ty0);
 	quad.getTexCoords()[1].set(tx1,ty0);
 	quad.getTexCoords()[2].set(tx1,ty1);
@@ -975,7 +975,7 @@ void ofTexture::drawSubsection(float x, float y, float z, float w, float h, floa
 	// before glEnable or else the shader gets confused
 	/// ps: maybe if bUsingArbTex is enabled we should use glActiveTextureARB?
 	//glActiveTexture(GL_TEXTURE0);
-	
+
 	bool wasBound = texData.isBound;
 	if(!wasBound) bind(0);
 	quad.draw();
@@ -993,16 +993,16 @@ void ofTexture::draw(const ofPoint & p1, const ofPoint & p2, const ofPoint & p3,
 	// we need a better solution for this, but
 	// to constantly add a 2 pixel border on all uploaded images
 	// is insane..
-	
+
 	GLfloat offsetw = 0.0f;
 	GLfloat offseth = 0.0f;
-	
+
 	if (texData.textureTarget == GL_TEXTURE_2D && bTexHackEnabled) {
 		offsetw = 1.0f / (texData.tex_w);
 		offseth = 1.0f / (texData.tex_h);
 	}
 	// -------------------------------------------------
-	
+
 	GLfloat tx0 = 0+offsetw;
 	GLfloat ty0 = 0+offseth;
 	GLfloat tx1 = texData.tex_t - offsetw;
@@ -1012,17 +1012,17 @@ void ofTexture::draw(const ofPoint & p1, const ofPoint & p2, const ofPoint & p3,
 	quad.getVertices()[1].set(p2.x, p2.y);
 	quad.getVertices()[2].set(p3.x, p3.y);
 	quad.getVertices()[3].set(p4.x, p4.y);
-	
+
 	quad.getTexCoords()[0].set(tx0,ty0);
 	quad.getTexCoords()[1].set(tx1,ty0);
 	quad.getTexCoords()[2].set(tx1,ty1);
 	quad.getTexCoords()[3].set(tx0,ty1);
-	
+
 	// make sure we are on unit 0 - we may change this when setting shader samplers
 	// before glEnable or else the shader gets confused
 	/// ps: maybe if bUsingArbTex is enabled we should use glActiveTextureARB?
 	//glActiveTexture(GL_TEXTURE0);
-	
+
 	bool wasBound = texData.isBound;
 	if(!wasBound) bind(0);
 	quad.draw();

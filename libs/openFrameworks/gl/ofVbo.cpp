@@ -135,7 +135,7 @@ ofVbo::ofVbo(){
 
 	totalVerts = 0;
 	totalIndices = 0;
-	
+
 	texCoordStride = sizeof(ofVec2f);
 	normalStride = sizeof(ofVec3f);
 	colorStride = sizeof(ofFloatColor);
@@ -185,7 +185,7 @@ ofVbo::ofVbo(const ofVbo & mom){
 	for (map<int, GLuint>::iterator it = attributeIds.begin(); it != attributeIds.end(); it++){
 		retain(it->second);
 	}
-	
+
 	attributeNumCoords = mom.attributeNumCoords;
 	attributeStrides = mom.attributeStrides;
 	attributeSize = mom.attributeSize;
@@ -242,11 +242,11 @@ ofVbo & ofVbo::operator=(const ofVbo& mom){
 	for (map<int, GLuint>::iterator it = attributeIds.begin(); it != attributeIds.end(); it++){
 		retain(it->second);
 	}
-	
+
 	attributeNumCoords = mom.attributeNumCoords;
 	attributeStrides = mom.attributeStrides;
 	attributeSize = mom.attributeSize;
-	
+
 	totalVerts = mom.totalVerts;
 	totalIndices = mom.totalIndices;
 
@@ -348,7 +348,7 @@ void ofVbo::setVertexData(const float * vert0x, int numCoords, int total, int us
 	vertSize = numCoords;
 	vertStride = stride==0?3*sizeof(float):stride;
 	totalVerts = total;
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, vertId);
 	glBufferData(GL_ARRAY_BUFFER, total * vertStride, vert0x, usage);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -369,7 +369,7 @@ void ofVbo::setColorData(const float * color0r, int total, int usage, int stride
 	}
 	colorUsage = usage;
 	colorStride = stride==0?4*sizeof(float):stride;
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, colorId);
 	glBufferData(GL_ARRAY_BUFFER, total * colorStride, color0r, usage);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -389,7 +389,7 @@ void ofVbo::setNormalData(const float * normal0x, int total, int usage, int stri
 	}
 	normUsage = usage;
 	normalStride = stride==0?3*sizeof(float):stride;
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, normalId);
 	glBufferData(GL_ARRAY_BUFFER, total * normalStride, normal0x, usage);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -409,7 +409,7 @@ void ofVbo::setTexCoordData(const float * texCoord0x, int total, int usage, int 
 	}
 	texUsage = usage;
 	texCoordStride = stride==0?2*sizeof(float):stride;
-	
+
 	glBindBuffer(GL_ARRAY_BUFFER, texCoordId);
 	glBufferData(GL_ARRAY_BUFFER, total * texCoordStride, texCoord0x, usage);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -423,9 +423,9 @@ void ofVbo::setIndexData(const ofIndexType * indices, int total, int usage){
 		retain(indexId);
 		enableIndices();
 	}
-	
+
 	totalIndices = total;
-	
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ofIndexType) * total, &indices[0], usage);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -594,17 +594,17 @@ void ofVbo::disableIndices(){
 //--------------------------------------------------------------
 bool ofVbo::getIsAllocated() const {
 	return bAllocated;
-}	
+}
 
 //--------------------------------------------------------------
 bool ofVbo::getUsingVerts() const  {
 	return bUsingVerts;
-}	
+}
 
 //--------------------------------------------------------------
 bool ofVbo::getUsingColors() const {
 	return bUsingColors;
-}	
+}
 
 //--------------------------------------------------------------
 bool ofVbo::getUsingNormals() const {
@@ -754,7 +754,7 @@ void ofVbo::bind(){
 				glDisableVertexAttribArray(ofShader::TEXCOORD_ATTRIBUTE);
 			}
 		}
-        
+
         if (bUsingIndices) {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexId);
         }
@@ -776,7 +776,7 @@ void ofVbo::bind(){
 	}
 
 
-	shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
+	std::shared_ptr<ofGLProgrammableRenderer> renderer = ofGetGLProgrammableRenderer();
 	if(renderer){
 		renderer->setAttributes(bUsingVerts,bUsingColors,bUsingTexCoords,bUsingNormals);
 	}
@@ -856,7 +856,7 @@ void ofVbo::drawElements(int drawMode, int amt) {
 #else
         glDrawElements(drawMode, amt, GL_UNSIGNED_INT, NULL);
 #endif
-		
+
 		if(!wasBinded) unbind();
 	}
 }
@@ -896,7 +896,7 @@ void ofVbo::drawElementsInstanced(int drawMode, int amt, int primCount) {
 #else
         glDrawElementsInstanced(drawMode, amt, GL_UNSIGNED_INT, NULL, primCount);
 #endif
-		
+
 		if(!wasBinded) unbind();
 	}
 }

@@ -42,17 +42,17 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 
 		ofVideoPlayer ();
 
-		void						setPlayer(shared_ptr<ofBaseVideoPlayer> newPlayer);
-		shared_ptr<ofBaseVideoPlayer>	getPlayer();
+		void						setPlayer(std::shared_ptr<ofBaseVideoPlayer> newPlayer);
+		std::shared_ptr<ofBaseVideoPlayer>	getPlayer();
 
 		bool 				loadMovie(string name);
 	    string				getMoviePath();
 
 		bool				setPixelFormat(ofPixelFormat pixelFormat);
-		ofPixelFormat		getPixelFormat(); 
-		
+		ofPixelFormat		getPixelFormat();
+
 		void 				closeMovie();
-		void 				close();		
+		void 				close();
 
 		void				update();
 		void 				play();
@@ -101,13 +101,13 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 		bool				isLoaded();
 		bool				isPlaying();
 
-		//this is kept as legacy to support people accessing width and height directly. 
+		//this is kept as legacy to support people accessing width and height directly.
 		int					height;
 		int					width;
 
 	private:
-		shared_ptr<ofBaseVideoPlayer>		player;
-		
+		std::shared_ptr<ofBaseVideoPlayer>		player;
+
 		ofTexture tex;
 		ofTexture * playerTex; // a seperate texture that may be optionally implemented by the player to avoid excessive pixel copying.
 		bool bUseTexture;

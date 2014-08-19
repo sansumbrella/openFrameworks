@@ -199,7 +199,7 @@ ofHttpResponse ofURLFileLoaderImpl::handleRequest(ofHttpRequest request) {
 
 		HTTPRequest req(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
 		HTTPResponse res;
-		shared_ptr<HTTPSession> session;
+		std::shared_ptr<HTTPSession> session;
 		istream * rs;
 		if(uri.getScheme()=="https"){
 			 //const Poco::Net::Context::Ptr context( new Poco::Net::Context( Poco::Net::Context::CLIENT_USE, "", "", "rootcert.pem" ) );
@@ -207,13 +207,13 @@ ofHttpResponse ofURLFileLoaderImpl::handleRequest(ofHttpRequest request) {
 			httpsSession->setTimeout(Poco::Timespan(20,0));
 			httpsSession->sendRequest(req);
 			rs = &httpsSession->receiveResponse(res);
-			session = shared_ptr<HTTPSession>(httpsSession);
+			session = std::shared_ptr<HTTPSession>(httpsSession);
 		}else{
 			HTTPClientSession * httpSession = new HTTPClientSession(uri.getHost(), uri.getPort());
 			httpSession->setTimeout(Poco::Timespan(20,0));
 			httpSession->sendRequest(req);
 			rs = &httpSession->receiveResponse(res);
-			session = shared_ptr<HTTPSession>(httpSession);
+			session = std::shared_ptr<HTTPSession>(httpSession);
 		}
 		if(!request.saveTo){
 			return ofHttpResponse(request,*rs,res.getStatus(),res.getReason());
@@ -244,8 +244,8 @@ ofHttpResponse ofURLFileLoaderImpl::handleRequest(ofHttpRequest request) {
     }
 
 	return ofHttpResponse(request,-1,"ofURLFileLoader: fatal error, couldn't catch Exception");
-	
-}	
+
+}
 
 void ofURLFileLoaderImpl::update(ofEventArgs & args){
 	lock();

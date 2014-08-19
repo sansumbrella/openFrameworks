@@ -48,20 +48,20 @@ class ofVideoGrabber : public ofBaseVideoGrabber,public ofBaseVideoDraws{
 
 		ofVideoGrabber();
 		virtual ~ofVideoGrabber();
-		
-		void					setGrabber(shared_ptr<ofBaseVideoGrabber> newGrabber);
-		shared_ptr<ofBaseVideoGrabber> getGrabber();
+
+		void					setGrabber(std::shared_ptr<ofBaseVideoGrabber> newGrabber);
+		std::shared_ptr<ofBaseVideoGrabber> getGrabber();
 
 		vector<ofVideoDevice> listDevices();
 		bool				isFrameNew();
 		void				update();
-		void				close();	
+		void				close();
 		bool				initGrabber(int w, int h){return initGrabber(w,h,true);}
 		bool				initGrabber(int w, int h, bool bTexture);
-		
+
 		bool				setPixelFormat(ofPixelFormat pixelFormat);
 		ofPixelFormat 		getPixelFormat();
-		
+
 		void				videoSettings();
 		unsigned char 	*	getPixels();
 		ofPixelsRef			getPixelsRef();
@@ -85,20 +85,20 @@ class ofVideoGrabber : public ofBaseVideoGrabber,public ofBaseVideoDraws{
 
 		bool				isInitialized();
 
-		//this is kept as legacy to support people accessing width and height directly. 
+		//this is kept as legacy to support people accessing width and height directly.
 		int					height;
 		int					width;
 
 	private:
-		
+
 		ofTexture tex;
 		bool bUseTexture;
 		bool bInitialized;
-		shared_ptr<ofBaseVideoGrabber> grabber;
+		std::shared_ptr<ofBaseVideoGrabber> grabber;
 		int RequestedDeviceID;
-		
-		bool grabberRunning; //this keeps track of whether the grabber opened sucessfully and is still open. //TODO: maybe expose this in a method? 
-		
+
+		bool grabberRunning; //this keeps track of whether the grabber opened sucessfully and is still open. //TODO: maybe expose this in a method?
+
 		ofPixelFormat internalPixelFormat;
 		int desiredFramerate;
 };

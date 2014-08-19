@@ -16,27 +16,27 @@ void 		ofSetupOpenGL(int w, int h, int screenMode);	// sets up the opengl contex
 void		ofSetOpenGLESVersion(int version);
 int			ofGetOpenGLESVersion();
 string		ofGetGLSLVersion();
-void 		ofSetupOpenGL(shared_ptr<ofAppBaseGLESWindow> windowPtr, int w, int h, int screenMode);	// sets up the opengl context!
+void 		ofSetupOpenGL(std::shared_ptr<ofAppBaseGLESWindow> windowPtr, int w, int h, int screenMode);	// sets up the opengl context!
 void 		ofSetupOpenGL(ofAppBaseGLESWindow * windowPtr, int w, int h, int screenMode);  // will be deprecated
 #else
 void		ofSetOpenGLVersion(int major, int minor);
 int			ofGetOpenGLVersionMajor();
 int			ofGetOpenGLVersionMinor();
 string		ofGetGLSLVersion();
-void 		ofSetupOpenGL(shared_ptr<ofAppBaseGLWindow> windowPtr, int w, int h, int screenMode);	// sets up the opengl context!
+void 		ofSetupOpenGL(std::shared_ptr<ofAppBaseGLWindow> windowPtr, int w, int h, int screenMode);	// sets up the opengl context!
 void 		ofSetupOpenGL(ofAppBaseGLWindow * windowPtr, int w, int h, int screenMode);  // will be deprecated
 #endif
 void		ofSetWindow(ofAppBaseWindow * windowPtr);
-void		ofSetWindow(shared_ptr<ofAppBaseWindow> windowPtr);
+void		ofSetWindow(std::shared_ptr<ofAppBaseWindow> windowPtr);
 void		OF_DEPRECATED_MSG("use ofSetWindow for non GL windows",ofSetupOpenGL(ofAppBaseWindow * windowPtr, int w, int h, int screenMode));
-//void		OF_DEPRECATED_MSG("use ofSetWindow for non GL windows",ofSetupOpenGL(shared_ptr<ofAppBaseWindow> windowPtr, int w, int h, int screenMode));
+//void		OF_DEPRECATED_MSG("use ofSetWindow for non GL windows",ofSetupOpenGL(std::shared_ptr<ofAppBaseWindow> windowPtr, int w, int h, int screenMode));
 
-void 		ofRunApp(shared_ptr<ofBaseApp> OFSA);
+void 		ofRunApp(std::shared_ptr<ofBaseApp> OFSA);
 void 		ofRunApp(ofBaseApp * OFSA = NULL); // will be deprecated
 
 
 ofBaseApp * ofGetAppPtr();
-void ofSetAppPtr(shared_ptr<ofBaseApp> appPtr);
+void ofSetAppPtr(std::shared_ptr<ofBaseApp> appPtr);
 
 void		ofExit(int status=0);
 
@@ -62,7 +62,7 @@ int 		ofGetScreenHeight();
 int			ofGetWindowMode();
 int 		ofGetWidth();			// ofGetWidth is correct for orientation
 int 		ofGetHeight();
-int 		ofGetWindowWidth();			// ofGetWindowWidth is correct for actual window coordinates - so doesn't change with orientation. 
+int 		ofGetWindowWidth();			// ofGetWindowWidth is correct for actual window coordinates - so doesn't change with orientation.
 int 		ofGetWindowHeight();
 bool		ofDoesHWOrientation();
 ofPoint		ofGetWindowSize();

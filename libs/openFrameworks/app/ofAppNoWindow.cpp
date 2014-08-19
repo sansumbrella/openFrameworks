@@ -78,7 +78,7 @@ void ofAppNoWindow::setupOpenGL(int w, int h, int screenMode){
 //------------------------------------------------------------
 void ofAppNoWindow::runAppViaInfiniteLoop(ofBaseApp * appPtr){
 
-	ofSetCurrentRenderer(shared_ptr<ofBaseRenderer>(new ofNoopRenderer));
+	ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer>(new ofNoopRenderer));
 
 	ofAppPtr = appPtr;
 

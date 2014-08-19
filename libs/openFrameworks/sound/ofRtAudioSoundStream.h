@@ -12,7 +12,7 @@ class ofRtAudioSoundStream : public ofBaseSoundStream{
 	public:
 		ofRtAudioSoundStream();
 		~ofRtAudioSoundStream();
-		
+
 		void listDevices();
 		void setDeviceID(int deviceID);
         void setInDeviceID(int deviceID);
@@ -22,22 +22,22 @@ class ofRtAudioSoundStream : public ofBaseSoundStream{
 		void setOutput(ofBaseSoundOutput * soundOutput);
 		bool setup(int outChannels, int inChannels, int sampleRate, int bufferSize, int nBuffers);
 		bool setup(ofBaseApp * app, int outChannels, int inChannels, int sampleRate, int bufferSize, int nBuffers);
-		
+
 		void start();
 		void stop();
 		void close();
-		
-		long unsigned long getTickCount();		
+
+		long unsigned long getTickCount();
 
 		int getNumInputChannels();
 		int getNumOutputChannels();
 		int getSampleRate();
 		int getBufferSize();
-	
-		
+
+
 	private:
 		long unsigned long	tickCount;
-		shared_ptr<RtAudio>		audio;
+		std::shared_ptr<RtAudio>		audio;
 		int					sampleRate;
 		int					outDeviceID, inDeviceID;
 		int					bufferSize;
@@ -45,7 +45,7 @@ class ofRtAudioSoundStream : public ofBaseSoundStream{
 		int					nOutputChannels;
 		ofBaseSoundInput *  soundInputPtr;
 		ofBaseSoundOutput * soundOutputPtr;
-		
+
 		static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int bufferSize, double streamTime, RtAudioStreamStatus status, void *data);
 
 };

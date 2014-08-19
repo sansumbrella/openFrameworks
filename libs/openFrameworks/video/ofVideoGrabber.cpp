@@ -38,12 +38,12 @@ ofVideoGrabber::~ofVideoGrabber(){
 }
 
 //--------------------------------------------------------------------
-void ofVideoGrabber::setGrabber(shared_ptr<ofBaseVideoGrabber> newGrabber){
+void ofVideoGrabber::setGrabber(std::shared_ptr<ofBaseVideoGrabber> newGrabber){
 	grabber = newGrabber;
 }
 
 //--------------------------------------------------------------------
-shared_ptr<ofBaseVideoGrabber> ofVideoGrabber::getGrabber(){
+std::shared_ptr<ofBaseVideoGrabber> ofVideoGrabber::getGrabber(){
 	return grabber;
 }
 
@@ -51,11 +51,11 @@ shared_ptr<ofBaseVideoGrabber> ofVideoGrabber::getGrabber(){
 bool ofVideoGrabber::initGrabber(int w, int h, bool setUseTexture){
 
 #ifndef OF_VID_GRABBER_TYPE
-#error OF_VID_GRABBER_TYPE is not #defined! 
+#error OF_VID_GRABBER_TYPE is not #defined!
 #endif
-    
+
 	if(!grabber){
-		setGrabber( shared_ptr<OF_VID_GRABBER_TYPE>(new OF_VID_GRABBER_TYPE) );
+		setGrabber( std::shared_ptr<OF_VID_GRABBER_TYPE>(new OF_VID_GRABBER_TYPE) );
 	}
 
 	bInitialized = true;
@@ -90,18 +90,18 @@ bool ofVideoGrabber::setPixelFormat(ofPixelFormat pixelFormat) {
 	if(grabber){
 		if( grabberRunning ){
 			ofLogWarning("ofVideoGrabber") << "setPixelFormat(): can't set pixel format while grabber is running";
-			internalPixelFormat = grabber->getPixelFormat(); 
+			internalPixelFormat = grabber->getPixelFormat();
 			return false;
 		}else{
-			if( grabber->setPixelFormat(pixelFormat) ){		
+			if( grabber->setPixelFormat(pixelFormat) ){
 				internalPixelFormat = grabber->getPixelFormat();  //we do this as either way we want the grabbers format
 			}else{
 				internalPixelFormat = grabber->getPixelFormat();  //we do this as either way we want the grabbers format
-				return false; 					
+				return false;
 			}
 		}
 	}else{
-		internalPixelFormat = pixelFormat;	
+		internalPixelFormat = pixelFormat;
 	}
 	return true;
 }
@@ -117,7 +117,7 @@ ofPixelFormat ofVideoGrabber::getPixelFormat(){
 //--------------------------------------------------------------------
 vector<ofVideoDevice> ofVideoGrabber::listDevices(){
 	if(!grabber){
-		setGrabber( shared_ptr<OF_VID_GRABBER_TYPE>(new OF_VID_GRABBER_TYPE) );
+		setGrabber( std::shared_ptr<OF_VID_GRABBER_TYPE>(new OF_VID_GRABBER_TYPE) );
 	}
 	return grabber->listDevices();
 }

@@ -18,7 +18,7 @@ of3dPrimitive::of3dPrimitive()
 
 //----------------------------------------------------------
 of3dPrimitive::~of3dPrimitive() {
-    
+
 }
 
 //----------------------------------------------------------
@@ -26,9 +26,9 @@ of3dPrimitive::of3dPrimitive(const of3dPrimitive & mom):ofNode(mom){
     texCoords = mom.texCoords;
     usingVbo = mom.usingVbo;
 	if(usingVbo){
-		mesh = shared_ptr<ofMesh>(new ofVboMesh);
+		mesh = std::shared_ptr<ofMesh>(new ofVboMesh);
 	}else{
-		mesh = shared_ptr<ofMesh>(new ofMesh);
+		mesh = std::shared_ptr<ofMesh>(new ofMesh);
 	}
 	*mesh = *mom.mesh;
 }
@@ -116,15 +116,15 @@ void of3dPrimitive::disableColors() {
 void of3dPrimitive::mapTexCoords( float u1, float v1, float u2, float v2 ) {
     //setTexCoords( u1, v1, u2, v2 );
     ofVec4f prevTcoord = getTexCoords();
-    
+
     for(int j = 0; j < getMesh().getNumTexCoords(); j++ ) {
         ofVec2f tcoord = getMesh().getTexCoord(j);
         tcoord.x = ofMap(tcoord.x, prevTcoord.x, prevTcoord.z, u1, u2);
         tcoord.y = ofMap(tcoord.y, prevTcoord.y, prevTcoord.w, v1, v2);
-        
+
         getMesh().setTexCoord(j, tcoord);
     }
-    
+
     texCoords.set(u1, v1, u2, v2);
 }
 
@@ -134,13 +134,13 @@ void of3dPrimitive::mapTexCoordsFromTexture( ofTexture& inTexture ) {
 #ifndef TARGET_OPENGLES
     bNormalized = (inTexture.getTextureData().textureTarget!=GL_TEXTURE_RECTANGLE_ARB);
 #endif
-    
+
     ofTextureData& tdata = inTexture.getTextureData();
     if(bNormalized)
         mapTexCoords( 0, 0, tdata.tex_t, tdata.tex_u );
     else
         mapTexCoords(0, 0, inTexture.getWidth(), inTexture.getHeight());
-    
+
     ofVec4f tcoords = getTexCoords();
     mapTexCoords(tcoords.x, tcoords.y, tcoords.z, tcoords.w);
 }
@@ -188,16 +188,16 @@ void of3dPrimitive::draw(ofPolyRenderMode renderType) {
 //--------------------------------------------------------------
 void of3dPrimitive::drawNormals(float length, bool bFaceNormals) {
     ofNode::transformGL();
-    
+
     if(getMesh().usingNormals()) {
         vector<ofVec3f>& normals    = getMesh().getNormals();
         vector<ofVec3f>& vertices   = getMesh().getVertices();
         ofVec3f normal;
         ofVec3f vert;
-        
+
         normalsMesh.setMode( OF_PRIMITIVE_LINES );
         normalsMesh.getVertices().resize( normals.size() * 2);
-        
+
         if(bFaceNormals) {
             for(int i = 0; i < (int)normals.size(); i++ ) {
                 if(i % 3 == 0) {
@@ -225,8 +225,8 @@ void of3dPrimitive::drawNormals(float length, bool bFaceNormals) {
     } else {
         ofLogWarning("of3dPrimitive") << "drawNormals(): mesh normals are disabled";
     }
-    
-    
+
+
     ofNode::restoreTransformGL();
 }
 
@@ -240,11 +240,11 @@ void of3dPrimitive::drawAxes(float a_size) {
 //--------------------------------------------------------------
 void of3dPrimitive::setUseVbo(bool useVbo){
 	if(useVbo!=usingVbo){
-		shared_ptr<ofMesh> newMesh;
+		std::shared_ptr<ofMesh> newMesh;
 		if(useVbo){
-			newMesh = shared_ptr<ofMesh>(new ofVboMesh);
+			newMesh = std::shared_ptr<ofMesh>(new ofVboMesh);
 		}else{
-			newMesh = shared_ptr<ofMesh>(new ofMesh);
+			newMesh = std::shared_ptr<ofMesh>(new ofMesh);
 		}
 		*newMesh = *mesh;
 		mesh = newMesh;
@@ -275,15 +275,15 @@ ofPlanePrimitive::~ofPlanePrimitive() {}
 
 //--------------------------------------------------------------
 void ofPlanePrimitive::set(float _width, float _height, int columns, int rows, ofPrimitiveMode mode) {
-    
+
     width  = _width;
     height = _height;
     resolution.set( columns, rows );
-    
+
     getMesh() = ofMesh::plane( getWidth(), getHeight(), getResolution().x, getResolution().y, mode );
-    
+
     normalizeAndApplySavedTexCoords();
-    
+
 }
 
 //--------------------------------------------------------------
@@ -324,14 +324,14 @@ void ofPlanePrimitive::setRows( int rows ) {
 void ofPlanePrimitive::setResolution( int columns, int rows ) {
     resolution.set( columns, rows );
     ofPrimitiveMode mode = getMesh().getMode();
-    
+
     set( getWidth(), getHeight(), getResolution().x, getResolution().y, mode );
 }
 
 //--------------------------------------------------------------
 void ofPlanePrimitive::setMode(ofPrimitiveMode mode) {
     ofPrimitiveMode currMode = getMesh().getMode();
-    
+
     if( mode != currMode )
         set( getWidth(), getHeight(), getResolution().x, getResolution().y, mode );
 }
@@ -382,7 +382,7 @@ ofSpherePrimitive::ofSpherePrimitive( float _radius, int res, ofPrimitiveMode mo
 
 //----------------------------------------------------------
 ofSpherePrimitive::~ofSpherePrimitive() {
-    
+
 }
 
 //----------------------------------------------------------
@@ -391,7 +391,7 @@ void ofSpherePrimitive::set( float _radius, int res, ofPrimitiveMode mode ) {
     resolution = res;
 
     getMesh() = ofMesh::sphere( getRadius(), getResolution(), mode );
-    
+
     normalizeAndApplySavedTexCoords();
 }
 
@@ -399,7 +399,7 @@ void ofSpherePrimitive::set( float _radius, int res, ofPrimitiveMode mode ) {
 void ofSpherePrimitive::setResolution( int res ) {
     resolution             = res;
     ofPrimitiveMode mode   = getMesh().getMode();
-    
+
     set(getRadius(), getResolution(), mode );
 }
 
@@ -444,7 +444,7 @@ ofIcoSpherePrimitive::ofIcoSpherePrimitive( float _radius, int iterations ) {
 
 //----------------------------------------------------------
 ofIcoSpherePrimitive::~ofIcoSpherePrimitive() {
-    
+
 }
 
 //----------------------------------------------------------
@@ -457,7 +457,7 @@ void ofIcoSpherePrimitive::set(float _radius, int res ) {
 void ofIcoSpherePrimitive::setResolution( int iterations ) {
     // store the number of iterations in the resolution //
     resolution = iterations;
-    
+
     getMesh() = ofMesh::icosphere( getRadius(), getResolution() );
     normalizeAndApplySavedTexCoords();
 }
@@ -507,23 +507,23 @@ void ofCylinderPrimitive::set(float _radius, float _height, int radiusSegments, 
     height = _height;
     bCapped = _bCapped;
     resolution.set( radiusSegments, heightSegments, capSegments );
-    
+
     int resX = getResolution().x;
     int resY = getResolution().y-1;
     int resZ = getResolution().z-1;
-    
+
     int indexStep = 2;
     if(mode == OF_PRIMITIVE_TRIANGLES) {
         indexStep = 6;
         resX = resX-1;
     }
-    
+
     // 0 -> top cap
     strides[0][0] = 0;
     strides[0][1] = resX * resZ * indexStep;
     vertices[0][0] = 0;
     vertices[0][1] = getResolution().x * getResolution().z;
-    
+
     // 1 -> cylinder //
     if(bCapped) {
         strides[1][0] = strides[0][0] + strides[0][1];
@@ -534,18 +534,18 @@ void ofCylinderPrimitive::set(float _radius, float _height, int radiusSegments, 
     }
     strides[1][1] = resX * resY * indexStep;
     vertices[1][1] = getResolution().x * getResolution().y;
-    
+
     // 2 -> bottom cap
     strides[2][0] = strides[1][0] + strides[1][1];
     strides[2][1] = resX * resZ * indexStep;
     vertices[2][0] = vertices[1][0]+vertices[1][1];
     vertices[2][1] = getResolution().x * getResolution().z;
-    
-    
+
+
     getMesh() = ofMesh::cylinder( getRadius(), getHeight(), getResolution().x, getResolution().y, getResolution().z, getCapped(), mode );
-    
+
     normalizeAndApplySavedTexCoords();
-    
+
 }
 
 //--------------------------------------------------------------
@@ -736,31 +736,31 @@ void ofConePrimitive::set( float _radius, float _height, int radiusSegments, int
     radius = _radius;
     height = _height;
     resolution.set(radiusSegments, heightSegments, capSegments);
-    
+
     int resX = getResolution().x;
     int resY = getResolution().y-1;
     int resZ = getResolution().z-1;
-    
+
     int indexStep = 2;
     if(mode == OF_PRIMITIVE_TRIANGLES) {
         indexStep = 6;
         resX = resX-1;
     }
-    
+
     strides[ 0 ][0] = 0;
     strides[ 0 ][1] = (resX)*(resY) * indexStep;
     vertices[0][0] = 0;
     vertices[0][1] = getResolution().x * getResolution().y;
-    
+
     strides[ 1 ][0] = strides[ 0 ][0] + strides[ 0 ][1];
     strides[ 1 ][1] = (resX)*(resZ) * indexStep;
     vertices[1][0] = vertices[0][0] + vertices[0][1];
     vertices[1][1] = getResolution().x * getResolution().z;
-    
+
     getMesh() = ofMesh::cone( getRadius(), getHeight(), getResolution().x, getResolution().y, getResolution().z, mode );
-    
+
     normalizeAndApplySavedTexCoords();
-    
+
 }
 
 //--------------------------------------------------------------
@@ -838,7 +838,7 @@ vector<ofIndexType> ofConePrimitive::getConeIndices() {
 ofMesh ofConePrimitive::getConeMesh() {
     int startIndex  = strides[0][0];
     int endIndex    = startIndex + strides[0][1];
-    
+
     int startVertIndex  = vertices[0][0];
     int endVertIndex    = startVertIndex + vertices[0][1];
     if(getMesh().getMode() != OF_PRIMITIVE_TRIANGLE_STRIP) {
@@ -860,7 +860,7 @@ vector<ofIndexType> ofConePrimitive::getCapIndices() {
 ofMesh ofConePrimitive::getCapMesh() {
     int startIndex  = strides[1][0];
     int endIndex    = startIndex + strides[1][1];
-    
+
     int startVertIndex  = vertices[1][0];
     int endVertIndex    = startVertIndex + vertices[1][1];
     if(getMesh().getMode() != OF_PRIMITIVE_TRIANGLE_STRIP) {
@@ -922,55 +922,55 @@ ofBoxPrimitive::~ofBoxPrimitive() {}
 
 //--------------------------------------------------------------
 void ofBoxPrimitive::set( float width, float height, float depth, int resWidth, int resHeight, int resDepth) {
-    
+
     size.x = width;
     size.y = height;
     size.z = depth;
-    
+
     resolution.set( resWidth, resHeight, resDepth );
-    
+
     int resX = getResolution().x;
     int resY = getResolution().y;
     int resZ = getResolution().z;
-    
+
     //FRONT, resY, resX
     strides[ SIDE_FRONT ][0] = 0;
     strides[ SIDE_FRONT ][1] = (resY-1)*(resX-1)*6;
     vertices[SIDE_FRONT][0] = 0;
     vertices[SIDE_FRONT][1] = resX * resY;
-    
+
     //RIGHT, resY, resZ
     strides[ SIDE_RIGHT ][0] = strides[ SIDE_FRONT ][0] + strides[ SIDE_FRONT ][1];
     strides[ SIDE_RIGHT ][1] = (resY-1)*(resZ-1)*6;
     vertices[SIDE_RIGHT][0] = vertices[SIDE_FRONT][0] + vertices[SIDE_FRONT][1];
     vertices[SIDE_RIGHT][1] = resY * resZ;
-    
+
     //LEFT, resY, resZ
     strides[ SIDE_LEFT ][0] = strides[ SIDE_RIGHT ][0] + strides[ SIDE_RIGHT ][1];
     strides[ SIDE_LEFT ][1] = (resY-1)*(resZ-1)*6;
     vertices[SIDE_LEFT][0] = vertices[SIDE_RIGHT][0] + vertices[SIDE_RIGHT][1];
     vertices[SIDE_LEFT][1] = resY * resZ;
-    
+
     //BACK, resY, resX
     strides[ SIDE_BACK ][0] = strides[ SIDE_LEFT ][0] + strides[ SIDE_LEFT ][1];
     strides[ SIDE_BACK ][1] = (resY-1)*(resX-1)*6;
     vertices[SIDE_BACK][0] = vertices[SIDE_LEFT][0] + vertices[SIDE_LEFT][1];
     vertices[SIDE_BACK][1] = resY * resX;
-    
+
     //TOP, resZ, resX
     strides[ SIDE_TOP ][0] = strides[ SIDE_BACK ][0] + strides[ SIDE_BACK ][1];
     strides[ SIDE_TOP ][1] = (resZ-1)*(resX-1)*6;
     vertices[SIDE_TOP][0] = vertices[SIDE_BACK][0] + vertices[SIDE_BACK][1];
     vertices[SIDE_TOP][1] = resZ * resX;
-    
+
     //BOTTOM, resZ, resX
     strides[ SIDE_BOTTOM ][0] = strides[ SIDE_TOP ][0]+strides[ SIDE_TOP ][1];
     strides[ SIDE_BOTTOM ][1] = (resZ-1)*(resX-1)*6;
     vertices[SIDE_BOTTOM][0] = vertices[SIDE_TOP][0] + vertices[SIDE_TOP][1];
     vertices[SIDE_BOTTOM][1] = resZ * resX;
-    
+
     getMesh() = ofMesh::box( getWidth(), getHeight(), getDepth(), getResolution().x, getResolution().y, getResolution().z );
-    
+
     normalizeAndApplySavedTexCoords();
 }
 
@@ -1010,28 +1010,28 @@ void ofBoxPrimitive::resizeToTexture( ofTexture& inTexture ) {
 
 //--------------------------------------------------------------
 vector<ofIndexType> ofBoxPrimitive::getSideIndices( int sideIndex ) {
-    
+
     if(sideIndex < 0 || sideIndex >= SIDES_TOTAL) {
         ofLogWarning("ofBoxPrimitive") << "getSideIndices(): faceIndex out of bounds, returning SIDE_FRONT";
         sideIndex = SIDE_FRONT;
     }
-    
+
     return getIndices(strides[sideIndex][0], strides[sideIndex][0]+strides[sideIndex][1]);
 }
 
 //--------------------------------------------------------------
 ofMesh ofBoxPrimitive::getSideMesh( int sideIndex ) {
-    
+
     if(sideIndex < 0 || sideIndex > SIDES_TOTAL) {
         ofLogWarning("ofBoxPrimitive") << "getSideMesh(): faceIndex out of bounds, using SIDE_FRONT";
         sideIndex = SIDE_FRONT;
     }
     int startIndex  = strides[sideIndex][0];
     int endIndex    = startIndex+strides[sideIndex][1];
-    
+
     int startVertIndex  = vertices[sideIndex][0];
     int endVertIndex    = startVertIndex + vertices[sideIndex][1];
-    
+
     return getMesh().getMeshForIndices( startIndex, endIndex, startVertIndex, endVertIndex );
 }
 

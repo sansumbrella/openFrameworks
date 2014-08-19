@@ -29,9 +29,9 @@ ofRtAudioSoundStream::~ofRtAudioSoundStream(){
 
 //------------------------------------------------------------------------------
 void ofRtAudioSoundStream::listDevices(){
-	shared_ptr<RtAudio> audioTemp;
+	std::shared_ptr<RtAudio> audioTemp;
 	try {
-		audioTemp = shared_ptr<RtAudio>(new RtAudio());
+		audioTemp = std::shared_ptr<RtAudio>(new RtAudio());
 	} catch (RtError &error) {
 		error.printMessage();
 		return;
@@ -91,7 +91,7 @@ bool ofRtAudioSoundStream::setup(int outChannels, int inChannels, int _sampleRat
 	bufferSize			= ofNextPow2(_bufferSize);	// must be pow2
 
 	try {
-		audio = shared_ptr<RtAudio>(new RtAudio);
+		audio = std::shared_ptr<RtAudio>(new RtAudio);
 	}	catch (RtError &error) {
 		error.printMessage();
 		return false;

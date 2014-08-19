@@ -55,34 +55,34 @@ static deque <ofRectangle> viewportHistory;
 static ofPath shape;
 static ofVboMesh gradientMesh;
 
-shared_ptr<ofBaseRenderer> & ofGetCurrentRenderer(){
-	static shared_ptr<ofBaseRenderer> * renderer = new shared_ptr<ofBaseRenderer>();
+std::shared_ptr<ofBaseRenderer> & ofGetCurrentRenderer(){
+	static std::shared_ptr<ofBaseRenderer> * renderer = new std::shared_ptr<ofBaseRenderer>();
 	return *renderer;
 }
 
 void ofSetCurrentRenderer(const string & rendererType,bool setDefaults){
 	if(rendererType==ofGLProgrammableRenderer::TYPE){
-		ofSetCurrentRenderer(shared_ptr<ofBaseRenderer>(new ofGLProgrammableRenderer),setDefaults);
+		ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer>(new ofGLProgrammableRenderer),setDefaults);
 #ifndef TARGET_PROGRAMMABLE_GL
 	}else if(rendererType==ofGLRenderer::TYPE){
-		ofSetCurrentRenderer(shared_ptr<ofBaseRenderer>(new ofGLRenderer),setDefaults);
+		ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer>(new ofGLRenderer),setDefaults);
 #endif
 #if !defined(TARGET_OF_IOS) && !defined(TARGET_ANDROID) && !defined(TARGET_EMSCRIPTEN)
 	}else if(rendererType==ofCairoRenderer::TYPE){
-		ofSetCurrentRenderer(shared_ptr<ofBaseRenderer>(new ofCairoRenderer),setDefaults);
+		ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer>(new ofCairoRenderer),setDefaults);
 #endif
 	}else{
 		ofLogError("ofGraphics") << "ofSetCurrentRenderer(): unknown renderer type " << rendererType << ", setting an ofGLRenderer";
-		ofLogError("ofGraphics") << "if you want to use a custom renderer, pass an ofPtr to a new instance of it";
+		ofLogError("ofGraphics") << "if you want to use a custom renderer, pass an std::shared_ptr to a new instance of it";
 #ifndef TARGET_PROGRAMMABLE_GL
-		ofSetCurrentRenderer(shared_ptr<ofBaseRenderer>(new ofGLRenderer),setDefaults);
+		ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer>(new ofGLRenderer),setDefaults);
 #else
-		ofSetCurrentRenderer(shared_ptr<ofBaseRenderer>(new ofGLProgrammableRenderer),setDefaults);
+		ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer>(new ofGLProgrammableRenderer),setDefaults);
 #endif
 	}
 }
 
-void ofSetCurrentRenderer(shared_ptr<ofBaseRenderer> renderer_,bool setDefaults){
+void ofSetCurrentRenderer(std::shared_ptr<ofBaseRenderer> renderer_,bool setDefaults){
 	ofGetCurrentRenderer() = renderer_;
 	if(ofGetCurrentRenderer()->rendersPathPrimitives()){
 		shape.setMode(ofPath::COMMANDS);
@@ -106,24 +106,24 @@ void ofSetCurrentRenderer(shared_ptr<ofBaseRenderer> renderer_,bool setDefaults)
 #include "ofCairoRenderer.h"
 #include "ofGLRenderer.h"
 
-static shared_ptr<ofCairoRenderer> cairoScreenshot;
-static shared_ptr<ofBaseRenderer> storedRenderer;
-static shared_ptr<ofRendererCollection> rendererCollection;
+static std::shared_ptr<ofCairoRenderer> cairoScreenshot;
+static std::shared_ptr<ofBaseRenderer> storedRenderer;
+static std::shared_ptr<ofRendererCollection> rendererCollection;
 static bool bScreenShotStarted = false;
 
 //-----------------------------------------------------------------------------------
 void ofBeginSaveScreenAsPDF(string filename, bool bMultipage, bool b3D, ofRectangle viewport){
 	if( bScreenShotStarted )ofEndSaveScreenAsPDF();
-	
-	storedRenderer = ofGetCurrentRenderer();
-	
-	cairoScreenshot = shared_ptr<ofCairoRenderer>(new ofCairoRenderer);
-	cairoScreenshot->setup(filename, ofCairoRenderer::PDF, bMultipage, b3D, viewport); 		
 
-	rendererCollection = shared_ptr<ofRendererCollection>(new ofRendererCollection);
+	storedRenderer = ofGetCurrentRenderer();
+
+	cairoScreenshot = std::shared_ptr<ofCairoRenderer>(new ofCairoRenderer);
+	cairoScreenshot->setup(filename, ofCairoRenderer::PDF, bMultipage, b3D, viewport);
+
+	rendererCollection = std::shared_ptr<ofRendererCollection>(new ofRendererCollection);
 	rendererCollection->renderers.push_back(ofGetGLRenderer());
 	rendererCollection->renderers.push_back(cairoScreenshot);
-	
+
 	ofSetCurrentRenderer(cairoScreenshot, true);
 	bScreenShotStarted = true;
 }
@@ -141,7 +141,7 @@ void ofEndSaveScreenAsPDF(){
 			ofSetCurrentRenderer(storedRenderer,true);
 			storedRenderer.reset();
 		}
-		
+
 		bScreenShotStarted = false;
 	}
 }
@@ -418,7 +418,7 @@ void ofClear(const ofColor & c){
 //----------------------------------------------------------
 void ofClearAlpha(){
 	ofGetCurrentRenderer()->clearAlpha();
-}	
+}
 
 //----------------------------------------------------------
 void ofSetBackgroundAuto(bool bAuto){
@@ -755,7 +755,7 @@ void ofSetStyle(ofStyle style){
 
 	//line width - finally!
 	ofSetLineWidth(style.lineWidth);
-	
+
 	//ofSetDepthTest(style.depthTest); removed since it'll break old projects setting depth test through glEnable
 
 	//rect mode: corner/center
@@ -780,7 +780,7 @@ void ofSetStyle(ofStyle style){
 
 	//blending
 	ofEnableBlendMode(style.blendingMode);
-	
+
 	//bitmap draw mode
 	ofSetDrawBitmapMode(style.drawBitmapMode);
 }
@@ -1123,28 +1123,28 @@ void ofDrawBitmapStringHighlight(string text, int x, int y, const ofColor& backg
 		}
 		maxLineLength = MAX(maxLineLength, currentLineLength);
 	}
-	
+
 	int padding = 4;
 	int fontSize = 8;
 	float leading = 1.7;
 	int height = lines.size() * fontSize * leading - 1;
 	int width = maxLineLength * fontSize;
-	
+
 	ofPushStyle();
 	glDepthMask(false);
 	ofSetColor(background);
 	ofFill();
 	ofPushMatrix();
-	
+
 	if(currentStyle.drawBitmapMode == OF_BITMAPMODE_MODEL) {
 		ofTranslate(x,y,0);
 		ofScale(1,-1,0);
 		ofTranslate(-(padding), + padding - fontSize - 2,0);
 	} else {
 		ofTranslate(x-(padding), y-(padding + fontSize + 2), 0);
-		
+
 	}
-	
+
 	ofRect(0, 0, width + 2 * padding, height + 2 * padding);
 	ofPopMatrix();
 	ofSetColor(foreground);
